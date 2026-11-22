@@ -1,0 +1,352 @@
+# KarmaTV PostFX - English
+# italiano<TAB>traduzione  (\n = a capo, \0 = separatore di lista)
+
+Valori predefiniti ripristinati: salva per mantenerli	Defaults restored: save to keep them
+Scrivi un nome per il nuovo profilo	Enter a name for the new profile
+Errore nel salvataggio del profilo	Couldn't save the profile
+Profilo salvato: 	Profile saved: 
+I profili fissi non si possono eliminare	Built-in profiles can't be deleted
+Profilo eliminato: 	Profile deleted: 
+Profilo: 	Profile: 
+Profilo fisso: salva le modifiche come nuovo profilo	Built-in profile: save your changes as a new profile
+Nessuna pista caricata: override non salvato	No track loaded: override not saved
+Nessuna auto in pista: override non salvato	No car on track: override not saved
+Errore nel salvataggio del preset	Couldn't save the preset
+Preset salvato: 	Preset saved: 
+Replay: modifiche non salvate, il profilo non cambia	Replay: unsaved changes, profile not switched
+Replay: profilo 	Replay: profile 
+Fine replay: profilo 	Replay over: profile 
+All'avvio: 	At startup: 
+Errore nel salvataggio di avvio.ini	Couldn't save avvio.ini
+Pista o auto cambiata: salva o ricarica il profilo per applicare gli override	Track or car changed: save or reload the profile to apply overrides
+Override caricato: 	Override loaded: 
+Variante 	Variant 
+: profilo 	: profile 
+KarmaTV PostFX 	KarmaTV PostFX 
+ disponibile: apri il menu (Canc) per aggiornare	 available: open the menu (Delete) to update
+nessuno	none
+Canc	Delete
+Ins	Insert
+Inizio	Home
+Fine	End
+PagSu	Page Up
+PagGiù	Page Down
+Pausa	Pause
+Bloc Scorr	Scroll Lock
+Bloc Num	Num Lock
+Stamp	Print Screen
+Spazio	Space
+Invio	Enter
+codice 	code 
+Pulsante assegnato: 	Button assigned: 
+. Controlla che rF2 non lo usi.	. Make sure rF2 doesn't use it.
+Tasto assegnato: 	Key assigned: 
+Attenzione: 	Warning: 
+ è usato anche da rF2 (	 is also used by rF2 (
+Effetti attivi	Effects on
+Effetti spenti	Effects off
+Confronto A/B: a sinistra l'immagine originale	A/B compare: original image on the left
+Confronto A/B spento	A/B compare off
+Attenzione: tasti usati anche da rF2: 	Warning: keys also used by rF2: 
+. Cambiali nella pagina Tasti.	. Change them on the Keys page.
+ finestra	 menu
+ effetti on/off	 effects on/off
+ profilo	 profile
+ confronto A/B	 A/B compare
+controller non collegato	controller not connected
+, pulsante 	, button 
+ (stima)	 (estimate)
+Effetti	Effects
+Profili	Profiles
+Automatismi	Automation
+Broadcast	Broadcast
+Prestazioni	Performance
+Tasti	Keys
+Nessun effetto, grafica di rF2	No effects, rF2 graphics
+Guida su monitor	Driving on a monitor
+Replay e regia	Replays and broadcast
+Visore, effetti leggeri	Headset, light effects
+Profilo fisso	Built-in profile
+Profilo personale	Your profile
+KARMA TV	KARMA TV
+OVERRIDE AUTO	CAR OVERRIDE
+OVERRIDE PISTA	TRACK OVERRIDE
+EFFETTI ATTIVI	EFFECTS ON
+EFFETTI SPENTI	EFFECTS OFF
+Chiudi avanzate	Close advanced
+Avanzate	Advanced
+Effetti KarmaTV attivi	KarmaTV effects on
+Effetti KarmaTV spenti	KarmaTV effects off
+NUOVA VERSIONE 	NEW VERSION 
+ DISPONIBILE	 AVAILABLE
+DOWNLOAD DELLA VERSIONE 	DOWNLOADING VERSION 
+VERSIONE 	VERSION 
+ PRONTA	 READY
+AGGIORNAMENTO NON RIUSCITO	UPDATE FAILED
+Ora usi la 	You're on 
+. Si installa da solo quando chiudi rF2.	. It installs itself when you close rF2.
+Si installa quando chiudi rFactor 2 (Windows chiederà il permesso).	Installs when you close rFactor 2 (Windows will ask for permission).
+Aggiorna	Update
+Riprova	Retry
+Annulla	Cancel
+Novità	What's new
+Grafica	Graphics
+Gara	Race
+Sistema	System
+in arrivo, fase %d	coming, phase %d
+escluso in VR	off in VR
+riavvia rF2	restart rF2
+%.2f ms	%.2f ms
+~%.1f ms	~%.1f ms
+Reset	Reset
+vale dal prossimo caricamento della pista	applies from the next track load
+caricato: auto	loaded: car
+caricato: pista	loaded: track
+si salvano dalla pagina Profili	saved from the Profiles page
+segue tonemap e LUT	follows tonemap and LUT
+Livello anisotropico	Anisotropic level
+Spostamento LOD (negativo = più nitido)	LOD bias (negative = sharper)
+Bind del back buffer dopo la scena (consigliato 2, 0 = fine frame)	Back buffer bind after the scene (2 recommended, 0 = end of frame)
+Frame: %d bind del back buffer, %d dopo la scena, %d draw	Frame: %d back buffer binds, %d after the scene, %d draws
+Analisi in corso...	Analyzing...
+Analizza un frame	Analyze a frame
+Analisi del frame scritta in ReShade.log	Frame analysis written to ReShade.log
+Che profilo usi?	Which profile?
+Avvio del gioco	Game startup
+Questo profilo si carica all'avvio di rF2 (	This profile loads when rF2 starts (
+Usa all'avvio	Use at startup
+Ora all'avvio si carica: 	Loaded at startup now: 
+Profili fissi con il lucchetto: puoi provare modifiche, ma si salvano solo come nuovo profilo. In verde i tuoi profili.	Built-in profiles have a lock: you can try changes, but they're saved only as a new profile. Your profiles are green.
+Originale rF2: tutti gli effetti KarmaTV sono spenti, anche quelli degli automatismi.	rF2 Original: all KarmaTV effects are off, including automation.
+AutoHDR resta acceso ma neutro (solo conversione in HDR, nessuna espansione). Per la grafica originale al 100%: spegni AutoHDR in Effetti e riavvia rF2.	AutoHDR stays on but neutral (HDR conversion only, no expansion). For 100% original graphics: turn off AutoHDR in Effects and restart rF2.
+Il filtro anisotropico resta forzato: per toglierlo spegnilo in Effetti e ricarica la pista.	Anisotropic filtering stays forced: to remove it, turn it off in Effects and reload the track.
+Nuovo profilo	New profile
+Nome del profilo (es. Daytona sera)	Profile name (e.g. Daytona evening)
+Salva come nuovo profilo	Save as new profile
+Salva tutte le regolazioni attuali con il nome scritto, per la variante attiva (Monitor o VR).	Saves all current settings under that name, for the active variant (Monitor or VR).
+Elimina questo profilo	Delete this profile
+Variante	Variant
+Automatica	Automatic
+Monitor	Monitor
+Rilevata automaticamente: %s	Detected automatically: %s
+Salvataggio	Saving
+Profilo fisso: non si sovrascrive. Per tenere le modifiche salvale come nuovo profilo (qui sopra o con il pulsante in basso a destra).	Built-in profile: it can't be overwritten. To keep your changes, save them as a new profile (above, or with the button at the bottom right).
+Annulla modifiche	Discard changes
+Ci sono modifiche non salvate.	There are unsaved changes.
+Impostazioni di sistema (AutoHDR, HUD, profondità...) salvate da sole in: 	System settings (AutoHDR, HUD, depth...) are saved automatically in: 
+\\sistema.ini	\\sistema.ini
+Salva profilo	Save profile
+Salva solo per questa pista	Save for this track only
+Salva solo per questa auto	Save for this car only
+Ripristina valori predefiniti	Restore defaults
+Override auto attivo: 	Car override active: 
+Override pista attivo: 	Track override active: 
+Pista: 	Track: 
+Auto: 	Car: 
+  (l'override per pista ha la precedenza su quello per auto)	  (the track override takes priority over the car one)
+Cartella dei preset: 	Preset folder: 
+Telemetria	Telemetry
+Collegata	Connected
+Pista: %s   |   Auto: %s	Track: %s   |   Car: %s
+Ora in pista %02d:%02d   |   Pioggia %.0f%%   |   Bagnato %.0f%%   |   Nuvole %.0f%%   |   Ai box: %s	Track time %02d:%02d   |   Rain %.0f%%   |   Wet %.0f%%   |   Clouds %.0f%%   |   In pits: %s
+sì	yes
+no	no
+Non collegata	Not connected
+Attiva rF2SharedMemoryMapPlugin. I profili manuali funzionano comunque.	Enable rF2SharedMemoryMapPlugin. Manual profiles work anyway.
+Regole	Rules
+Automatismi attivi	Automation on
+Effetti nei replay	Effects in replays
+Replay in corso	Replay running
+Nessuno (resta quello attivo)	None (keep the active one)
+Profilo nei replay e nel monitor di gara	Profile for replays and race monitor
+in uso ora	in use now
+Quando parte un replay o guardi la gara a schermo intero dal monitor, KarmaTV passa a questo profilo e, finito il replay, torna a quello di prima. Serve "Effetti nei replay" acceso.	When a replay starts or you watch the race full screen from the monitor, KarmaTV switches to this profile and switches back when the replay ends. Needs "Effects in replays" on.
+in arrivo, fase 2	coming, phase 2
+Uscita pulita per OBS (Spout2)	Clean output for OBS (Spout2)
+Clean feed Spout2	Spout2 clean feed
+Disponibile solo nella variante Monitor.	Available in the Monitor variant only.
+In onda %ux%u	On air %ux%u
+In attesa del primo frame	Waiting for the first frame
+Invia a OBS la scena con gli effetti ma senza HUD, specchietto virtuale e finestra KarmaTV.	Sends OBS the scene with effects but without HUD, virtual mirror and KarmaTV menu.
+In OBS: plugin Spout2, sorgente "Spout2 Capture", sender "KarmaTV rF2".	In OBS: Spout2 plugin, "Spout2 Capture" source, sender "KarmaTV rF2".
+Senza esclusione HUD (o nei menu) viene inviata l'immagine intera.	Without HUD exclusion (or in menus) the full image is sent.
+Regia	Broadcast direction
+Preset regia (Replay)	Broadcast preset (Replay)
+Profilo Replay Karma FX: profondità di campo, motion blur, antialiasing	Replay Karma FX profile: depth of field, motion blur, antialiasing
+Il profilo Replay Karma FX esiste solo nella variante Monitor	The Replay Karma FX profile exists only in the Monitor variant
+Screenshot	Screenshot
+Screenshot salvato nella cartella degli screenshot di ReShade	Screenshot saved in the ReShade screenshot folder
+Lo screenshot viene salvato con gli effetti, senza la finestra KarmaTV.	The screenshot is saved with the effects, without the KarmaTV menu.
+Riepilogo	Summary
+FPS: %.0f	FPS: %.0f
+Tempo GPU degli effetti KarmaTV: %.2f ms	GPU time of KarmaTV effects: %.2f ms
+Profiler GPU non disponibile: i valori sono stime.	GPU profiler not available: values are estimates.
+Budget (ms)	Budget (ms)
+Effetto	Effect
+Stima	Estimate
+Misurato	Measured
+%.1f - %.1f ms	%.1f - %.1f ms
+Picchi	Spikes
+Picchi registrati in questa sessione: %d	Spikes logged this session: %d
+Ogni picco (frame lungo o effetti molto piu' costosi del solito) finisce in ReShade.log con il costo di ogni effetto e cosa era appena cambiato.	Each spike (long frame or effects much costlier than usual) goes to ReShade.log with the cost of each effect and what had just changed.
+Diagnostica	Diagnostics
+Vista profondità	Depth view
+corretta se gli oggetti vicini sono scuri e l'orizzonte chiaro	correct if nearby objects are dark and the horizon is light
+Profondità KarmaTV: errore, %s	KarmaTV depth: error, %s
+Profondità KarmaTV: %u x %u, MSAA %ux, %s, %llu copie	KarmaTV depth: %u x %u, MSAA %ux, %s, %llu copies
+invertita (rilevata)	reversed (detected)
+normale (rilevata)	normal (detected)
+verso non ancora rilevato	direction not detected yet
+Profondità KarmaTV: nessun depth buffer MSAA trovato (serve riavviare rF2 dopo l'installazione)	KarmaTV depth: no MSAA depth buffer found (restart rF2 after installing)
+Verso della profondità	Depth direction
+Automatico	Automatic
+Normale	Normal
+Invertito	Reversed
+Distanza massima (m)	Max distance (m)
+Immagine elaborata da ReShade: %u x %u   |   Effetti ReShade: %s	Image processed by ReShade: %u x %u   |   ReShade effects: %s
+attivi	on
+SPENTI	OFF
+Shader	Shader
+Trovato	Found
+Richiesto	Requested
+In ReShade	In ReShade
+acceso	on
+spento	off
+Tasti rapidi	Hotkeys
+rF2 legge la tastiera per conto suo e ignora Ctrl, Alt e Maiusc: usa solo tasti che rF2 non ha assegnato.	rF2 reads the keyboard on its own and ignores Ctrl, Alt and Shift: use only keys that rF2 hasn't assigned.
+Azione	Action
+Tasto	Key
+usato da rF2: 	used by rF2: 
+Premi un tasto...	Press a key...
+Cambia	Change
+Ripristina tasti predefiniti	Restore default keys
+Tasti predefiniti ripristinati	Default keys restored
+Pulsanti del volante	Wheel buttons
+Controller collegati: %d. Usa pulsanti che non hai assegnato in rF2.	Connected controllers: %d. Use buttons you haven't assigned in rF2.
+Pulsante	Button
+Premi un pulsante...	Press a button...
+Togli	Remove
+Esc annulla la scelta di un tasto o di un pulsante. Tutto è salvato in KarmaTV-PostFX\\tasti.ini.	Esc cancels picking a key or button. Everything is saved in KarmaTV-PostFX\\tasti.ini.
+Le modifiche a 	Your changes to 
+ diventano un profilo nuovo.	 become a new profile.
+Il profilo fisso resta com'era.	The built-in profile stays as it was.
+È il nome di un profilo fisso: scegline un altro.	That's a built-in profile name: choose another.
+Salva	Save
+Controllo...	Checking...
+Aggiornato · Controlla	Up to date · Check
+Controlla aggiornamenti	Check for updates
+Salva modifiche	Save changes
+Torna ai profili	Back to profiles
+Personalizza i tasti	Customize keys
+Tasti della tastiera e pulsanti del volante per menu, effetti e profili.	Keyboard keys and wheel buttons for menu, effects and profiles.
+Tonemapper	Tonemapper
+Neutro	Neutral
+ACES	ACES
+AgX	AgX
+Generale	General
+Esposizione (EV)	Exposure (EV)
+Recupero alte luci	Highlight recovery
+Esposizione automatica	Auto exposure
+Velocità di adattamento	Adaptation speed
+Cruscotto (strumenti, volante, plancia)	Dashboard (gauges, wheel, dash)
+Alte luci	Highlights
+Abitacolo (montanti, tetto, fianchi)	Cockpit (pillars, roof, sides)
+Pista	Track
+Sfondo e cielo	Background and sky
+Mostra le zone a colori	Show zones in color
+No	No
+Sì	Yes
+Confini delle zone	Zone boundaries
+Cruscotto: centro (orizzontale)	Dashboard: center (horizontal)
+Cruscotto: larghezza	Dashboard: width
+Cruscotto: bordo alto (0 = in alto)	Dashboard: top edge (0 = top)
+Cruscotto: bordo basso	Dashboard: bottom edge
+Fine dell'abitacolo (profondità)	Cockpit end (depth)
+Inizio dello sfondo (m)	Background start (m)
+Soglia	Threshold
+Morbidezza della soglia	Threshold softness
+Temperatura (freddo - caldo)	Temperature (cool - warm)
+Bilanciamento del bianco	White balance
+Tinta (verde - magenta)	Tint (green - magenta)
+Vibrance	Vibrance
+Colore	Color
+Saturazione	Saturation
+Contrasto (curva a S)	Contrast (S curve)
+LUT	LUT
+Neutra	Neutral
+Broadcast TV	TV broadcast
+Pomeriggio caldo	Warm afternoon
+Nuvoloso freddo	Cold overcast
+Cinematica	Cinematic
+Notte	Night
+Stile DLSS5	DLSS5 style
+Personale 2	Custom 2
+Personale 3	Custom 3
+Personale 4	Custom 4
+Intensità della LUT	LUT strength
+Visibilità (m)	Visibility (m)
+Foschia sul cielo	Haze on the sky
+Tinta (fredda - neutra - calda)	Tint (cool - neutral - warm)
+Luminosità della foschia	Haze brightness
+Raggio (m)	Radius (m)
+Solo nelle zone scure	Only in dark areas
+Campo visivo verticale (gradi)	Vertical field of view (degrees)
+Picco del monitor (nit)	Monitor peak (nits)
+Bianco carta (nit)	Paper white (nits)
+Saturazione HDR	HDR saturation
+Soglia (solo luci forti)	Threshold (bright lights only)
+Lunghezza dei raggi	Ray length
+Luminosità del cielo (EV)	Sky brightness (EV)
+Azzurro	Blue
+Contrasto delle nuvole	Cloud contrast
+Sfumatura verso l'orizzonte	Fade toward the horizon
+Riduzione del rumore	Noise reduction
+Sensibilità ai bordi	Edge sensitivity
+Scia massima (% dello schermo)	Max trail (% of screen)
+Profondità del fuoco	Focus depth
+Velocità della messa a fuoco	Focus speed
+Aberrazione cromatica	Chromatic aberration
+Grana	Grain
+Sporco sulla lente	Lens dirt
+Vista	View
+Profondità	Depth
+Normali ricostruite	Reconstructed normals
+Metà immagine, metà profondità	Half image, half depth
+Tonemapping ed esposizione	Tonemapping and exposure
+Bloom	Bloom
+AutoHDR (HDR10, picco 1000 nit)	AutoHDR (HDR10, 1000 nit peak)
+Riflessi a stella sui fari	Star glare on headlights
+LUT, bilanciamento del bianco, vibrance, curve	LUT, white balance, vibrance, curves
+Preset automatici per pista e auto	Automatic presets per track and car
+Sharpening CAS	CAS sharpening
+Filtro anisotropico e LOD forzati	Forced anisotropic filtering and LOD
+Nitidezza FSR 1 (RCAS, alternativa al CAS)	FSR 1 sharpening (RCAS, alternative to CAS)
+Antialiasing post (reti, alberi, linee sottili)	Post antialiasing (fences, trees, thin lines)
+Occlusione ambientale GTAO	GTAO ambient occlusion
+Cielo (solo il cielo: luminosità, azzurro, nuvole)	Sky (sky only: brightness, blue, clouds)
+Nebbia e foschia atmosferica	Fog and atmospheric haze
+Profondità di campo (replay)	Depth of field (replay)
+Luce indiretta (SSGI)	Indirect light (SSGI)
+Aberrazione cromatica, grana, sporco lente	Chromatic aberration, grain, lens dirt
+Motion blur della camera (replay)	Camera motion blur (replay)
+Esclusione dell'HUD dagli effetti	Keep the HUD out of effects
+Viste di debug (depth, normali)	Debug views (depth, normals)
+Specchietto virtuale con i colori della scena	Virtual mirror with scene colors
+Luce e HDR	Light and HDR
+Nitidezza, anti-aliasing e scaling	Sharpness, anti-aliasing and scaling
+Ray tracing in screen-space	Screen-space ray tracing
+Camera e lente	Camera and lens
+Interventi sul rendering di rF2	rF2 rendering tweaks
+Apri / chiudi la finestra	Open / close the menu
+Effetti on / off	Effects on / off
+Profilo precedente	Previous profile
+Profilo successivo	Next profile
+Confronto A/B	A/B compare
+Impronta dell'aggiornamento non scaricata.	Couldn't download the update checksum.
+Download dell'aggiornamento non riuscito.	Update download failed.
+L'installer scaricato non corrisponde all'impronta: aggiornamento annullato.	The downloaded installer doesn't match its checksum: update cancelled.
+Impossibile salvare l'installer scaricato.	Couldn't save the downloaded installer.
+Impossibile preparare l'installazione automatica.	Couldn't set up the automatic install.
+Originale rF2	rF2 Original
+PROFILO	PROFILE
+AVVIO	STARTUP

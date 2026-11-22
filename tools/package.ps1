@@ -35,9 +35,10 @@ if (-not $iscc) { throw "Inno Setup 6 non trovato. Installalo con: winget instal
 
 # --- Compilazione --------------------------------------------------------------
 if (-not $SkipBuild) {
-    $cmake = (Get-Command cmake -ErrorAction SilentlyContinue).Source
-    if (-not $cmake) {
-        $cmake = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+    # Prima il CMake di Visual Studio (quello che ha configurato la cartella build), poi quello nel PATH
+    $cmake = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+    if (-not (Test-Path $cmake)) {
+        $cmake = (Get-Command cmake -ErrorAction SilentlyContinue).Source
     }
     Push-Location $root
     try {

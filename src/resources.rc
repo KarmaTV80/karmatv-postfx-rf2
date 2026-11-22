@@ -1,2 +1,9 @@
 // Risorse incluse nell'add-on
 101 RCDATA "../assets/karma_tv_logo.png"
+
+// Traduzioni del menu (vedi core/i18n.cpp)
+201 RCDATA "../lang/en.tsv"
+202 RCDATA "../lang/es.tsv"
+203 RCDATA "../lang/fr.tsv"
+204 RCDATA "../lang/de.tsv"
+205 RCDATA "../lang/pt.tsv"

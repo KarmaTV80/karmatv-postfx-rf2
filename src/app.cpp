@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "core/i18n.hpp"
 #include "core/log.hpp"
 #include "input/hotkeys.hpp"
 #include "perf/spike_monitor.hpp"
@@ -154,7 +155,7 @@ void App::reset_profile_to_defaults()
     profile = make_default_profile(name, active_variant());
     carry_system_settings(profile, current);
     dirty = true;
-    toast("Valori predefiniti ripristinati: salva per mantenerli");
+    toast(tr("Valori predefiniti ripristinati: salva per mantenerli"));
 }
 
 void App::init(HMODULE addon_module)
@@ -173,6 +174,7 @@ void App::init(HMODULE addon_module)
     last_variant_ = active_variant();
     refresh_profiles();
     load_startup_files();
+    i18n::set_language(language_);
     load_profile(startup_index());
     load_hotkeys(base_dir);
     check_rf2_key_conflicts(base_dir.parent_path(), *this);
@@ -241,7 +243,7 @@ void App::save_profile_as(const std::string &requested_name)
     const std::string name = clean_profile_name(requested_name);
     if (name.empty())
     {
-        toast("Scrivi un nome per il nuovo profilo");
+        toast(tr("Scrivi un nome per il nuovo profilo"));
         return;
     }
     const Variant variant = active_variant();
@@ -250,7 +252,7 @@ void App::save_profile_as(const std::string &requested_name)
     const auto file = presets_dir / profile_file_name(name, variant);
     if (!write_profile_file(file, profile))
     {
-        toast("Errore nel salvataggio del profilo");
+        toast(tr("Errore nel salvataggio del profilo"));
         return;
     }
     refresh_profiles();
@@ -258,7 +260,7 @@ void App::save_profile_as(const std::string &requested_name)
     profile_index = it != profile_list_.end() ? static_cast<int>(it - profile_list_.begin()) : 0;
     loaded_override.clear();
     dirty = false;
-    toast("Profilo salvato: " + name);
+    toast(tr("Profilo salvato: ") + name);
 }
 
 void App::delete_current_profile()
@@ -266,14 +268,14 @@ void App::delete_current_profile()
     const std::string name = profile_list_[profile_index];
     if (is_builtin_profile(name))
     {
-        toast("I profili fissi non si possono eliminare");
+        toast(tr("I profili fissi non si possono eliminare"));
         return;
     }
     std::error_code ec;
     std::filesystem::remove(presets_dir / profile_file_name(name, active_variant()), ec);
     refresh_profiles();
     load_profile(startup_index());
-    toast("Profilo eliminato: " + name);
+    toast(tr("Profilo eliminato: ") + name);
 }
 
 void App::load_profile(int index)
@@ -343,7 +345,7 @@ void App::load_profile(int index)
 void App::next_profile(int step)
 {
     load_profile(profile_index + step);
-    toast("Profilo: " + profile.name + " (" + variant_name(profile.variant) + ")");
+    toast(tr("Profilo: ") + profile.name + " (" + variant_name(profile.variant) + ")");
 }
 
 void App::save_profile(SaveTarget target)
@@ -351,7 +353,7 @@ void App::save_profile(SaveTarget target)
     const std::string &name = profile_names()[profile_index];
     if (is_builtin_profile(name))
     {
-        toast("Profilo fisso: salva le modifiche come nuovo profilo", 3.0);
+        toast(tr("Profilo fisso: salva le modifiche come nuovo profilo"), 3.0);
         return;
     }
     const Variant variant = active_variant();
@@ -364,7 +366,7 @@ void App::save_profile(SaveTarget target)
         track = t.track_name;
         if (track.empty())
         {
-            toast("Nessuna pista caricata: override non salvato");
+            toast(tr("Nessuna pista caricata: override non salvato"));
             return;
         }
     }
@@ -372,7 +374,7 @@ void App::save_profile(SaveTarget target)
     {
         if (t.vehicle_name.empty())
         {
-            toast("Nessuna auto in pista: override non salvato");
+            toast(tr("Nessuna auto in pista: override non salvato"));
             return;
         }
         track = car_key(t.vehicle_name);
@@ -384,7 +386,7 @@ void App::save_profile(SaveTarget target)
     const auto file = presets_dir / profile_file_name(name, variant, track);
     if (!write_profile_file(file, profile))
     {
-        toast("Errore nel salvataggio del preset");
+        toast(tr("Errore nel salvataggio del preset"));
         return;
     }
 
@@ -398,7 +400,7 @@ void App::save_profile(SaveTarget target)
         override_is_car = target == SaveTarget::Car;
     }
     dirty = false;
-    toast("Preset salvato: " + file.filename().string());
+    toast(tr("Preset salvato: ") + file.filename().string());
 }
 
 // Replay e monitor di gara a schermo intero: si passa al profilo scelto e, finito il replay,
@@ -421,14 +423,14 @@ void App::update_replay_profile(double now)
         if (modified())
         {
             if (!replay_warned_)
-                toast("Replay: modifiche non salvate, il profilo non cambia", 4.0);
+                toast(tr("Replay: modifiche non salvate, il profilo non cambia"), 4.0);
             replay_warned_ = true;
             return;
         }
         profile_before_replay_ = profile_index;
         replay_switched_ = true;
         load_profile(static_cast<int>(it - names.begin()));
-        toast("Replay: profilo " + profile.name);
+        toast(tr("Replay: profilo ") + profile.name);
         return;
     }
 
@@ -439,7 +441,7 @@ void App::update_replay_profile(double now)
     if (!modified())
     {
         load_profile(profile_before_replay_);
-        toast("Fine replay: profilo " + profile.name);
+        toast(tr("Fine replay: profilo ") + profile.name);
     }
 }
 
@@ -472,11 +474,26 @@ void App::set_startup_profile()
 {
     const std::string name = profile_list_[profile_index];
     (active_variant() == Variant::VR ? startup_vr_ : startup_monitor_) = name;
+    write_startup_file();
+    toast(tr("All'avvio: ") + name);
+}
+
+void App::write_startup_file()
+{
     std::ofstream out(base_dir / L"avvio.ini");
-    out << "; KarmaTV PostFX - profilo caricato all'avvio di rF2\n";
+    out << "; KarmaTV PostFX - profilo caricato all'avvio di rF2 e lingua del menu\n";
     out << "Monitor=" << startup_monitor_ << "\n";
     out << "VR=" << startup_vr_ << "\n";
-    toast(out ? "All'avvio: " + name : std::string("Errore nel salvataggio di avvio.ini"));
+    out << "Lingua=" << language_ << "\n";
+    if (!out)
+        toast(tr("Errore nel salvataggio di avvio.ini"));
+}
+
+void App::set_language(const std::string &code)
+{
+    language_ = code;
+    i18n::set_language(code);
+    write_startup_file();
 }
 
 // avvio.ini: profilo di avvio per Monitor e VR
@@ -492,6 +509,8 @@ void App::load_startup_files()
             startup_monitor_ = line.substr(8);
         else if (line.rfind("VR=", 0) == 0 && line.size() > 3)
             startup_vr_ = line.substr(3);
+        else if (line.rfind("Lingua=", 0) == 0)
+            language_ = line.substr(7);
     }
 }
 
@@ -560,13 +579,13 @@ void App::update_frame(reshade::api::effect_runtime *runtime)
         {
             if (modified())
             {
-                toast("Pista o auto cambiata: salva o ricarica il profilo per applicare gli override", 4.0);
+                toast(tr("Pista o auto cambiata: salva o ricarica il profilo per applicare gli override"), 4.0);
             }
             else
             {
                 load_profile(profile_index);
                 if (!loaded_override.empty())
-                    toast("Override caricato: " + loaded_override);
+                    toast(tr("Override caricato: ") + loaded_override);
             }
         }
     }
@@ -583,7 +602,7 @@ void App::update_frame(reshade::api::effect_runtime *runtime)
             last_variant_ = active_variant();
             refresh_profiles();
             load_profile(startup_index());
-            toast(std::string("Variante ") + variant_name(last_variant_) + ": profilo " + profile.name);
+            toast(std::string(tr("Variante ")) + variant_name(last_variant_) + tr(": profilo ") + profile.name);
         }
     }
 
@@ -600,7 +619,7 @@ void App::update_frame(reshade::api::effect_runtime *runtime)
         if (u.state == update::State::Available)
         {
             announced = true;
-            toast("KarmaTV PostFX " + u.version + " disponibile: apri il menu (Canc) per aggiornare", 8.0);
+            toast(tr("KarmaTV PostFX ") + u.version + tr(" disponibile: apri il menu (Canc) per aggiornare"), 8.0);
         }
     }
     rules.update(telemetry.snapshot(), dt, profile.features.rules_enabled);

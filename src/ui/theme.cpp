@@ -1,4 +1,5 @@
 #include "ui/theme.hpp"
+#include "core/i18n.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -412,7 +413,7 @@ void budget_bar(float used_ms, float budget_ms, bool measured)
     const bool over = used_ms > budget;
 
     char label[96];
-    std::snprintf(label, sizeof(label), "GPU %.2f / %.1f ms%s", used_ms, budget, measured ? "" : " (stima)");
+    std::snprintf(label, sizeof(label), "GPU %.2f / %.1f ms%s", used_ms, budget, measured ? "" : tr(" (stima)"));
     ImGui::AlignTextToFramePadding();
     ImGui::PushStyleColor(ImGuiCol_Text, over ? color::bad : color::text_dim);
     ImGui::TextUnformatted(label);

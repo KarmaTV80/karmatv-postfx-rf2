@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(KarmaTV_PostFX VERSION 1.0.0 LANGUAGES CXX)
+project(KarmaTV_PostFX VERSION 1.1.0 LANGUAGES CXX)
 
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "KarmaTV PostFX si compila solo a 64 bit (rFactor 2 e' x64).")
@@ -34,6 +34,7 @@ set(KTV_SOURCES
     src/broadcast/spout_sender.cpp
     src/app.cpp
     src/core/effects_catalog.cpp
+    src/core/i18n.cpp
     src/core/log.cpp
     src/core/settings.cpp
     src/input/hotkeys.cpp

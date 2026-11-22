@@ -1,4 +1,5 @@
 #include "input/wheel.hpp"
+#include "core/i18n.hpp"
 #include "core/log.hpp"
 
 #define DIRECTINPUT_VERSION 0x0800
@@ -273,10 +274,10 @@ bool capture(Binding &out)
 std::string describe(const Binding &binding)
 {
     if (!binding.valid())
-        return "nessuno";
+        return tr("nessuno");
     const Device *d = find(binding.device);
-    const std::string name = d != nullptr ? d->name : (binding.device_name.empty() ? "controller non collegato" : binding.device_name);
-    return name + ", pulsante " + std::to_string(binding.button + 1);
+    const std::string name = d != nullptr ? d->name : (binding.device_name.empty() ? std::string(tr("controller non collegato")) : binding.device_name);
+    return name + tr(", pulsante ") + std::to_string(binding.button + 1);
 }
 
 std::string to_string(const Binding &binding)

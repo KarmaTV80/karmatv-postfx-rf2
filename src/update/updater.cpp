@@ -399,7 +399,7 @@ void run_download()
         out.write(data.data(), static_cast<std::streamsize>(data.size()));
         if (!out)
         {
-            set_state(State::Failed, "Impossibile salvare l'installer in " + setup.string());
+            set_state(State::Failed, "Impossibile salvare l'installer scaricato.");
             return;
         }
     }

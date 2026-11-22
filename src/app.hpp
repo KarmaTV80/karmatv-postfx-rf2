@@ -85,6 +85,8 @@ struct App
     void set_startup_profile();
     // Modifiche non salvate: per i profili fissi = differenze dai valori fissi
     bool modified() const;
+    // Lingua del menu (vuota = quella di Windows), salvata in avvio.ini
+    void set_language(const std::string &code);
 
     void toast(std::string text, double seconds = 2.0);
     bool replay_profile_active() const { return replay_switched_; }
@@ -94,6 +96,8 @@ private:
     Profile builtin_reference_;           // valori del profilo fisso caricato
     std::string startup_monitor_ = "Karma FX";
     std::string startup_vr_ = "VR Karma FX";
+    std::string language_;
+    void write_startup_file();
     Features saved_system_;               // impostazioni di sistema scritte in sistema.ini
     EffectSetting saved_hdr_;
     double last_system_check_ = 0.0;

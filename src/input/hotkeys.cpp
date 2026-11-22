@@ -1,5 +1,6 @@
 #include "input/hotkeys.hpp"
 #include "app.hpp"
+#include "core/i18n.hpp"
 #include "core/log.hpp"
 #include "input/wheel.hpp"
 
@@ -98,19 +99,19 @@ std::string dik_name(int dik)
 {
     switch (dik)
     {
-    case 0: return "nessuno";
-    case 211: return "Canc";
-    case 210: return "Ins";
-    case 199: return "Inizio";
-    case 207: return "Fine";
-    case 201: return "PagSu";
-    case 209: return "PagGiù";
-    case 197: return "Pausa";
-    case 70: return "Bloc Scorr";
-    case 69: return "Bloc Num";
-    case 183: return "Stamp";
-    case 57: return "Spazio";
-    case 28: return "Invio";
+    case 0: return tr("nessuno");
+    case 211: return tr("Canc");
+    case 210: return tr("Ins");
+    case 199: return tr("Inizio");
+    case 207: return tr("Fine");
+    case 201: return tr("PagSu");
+    case 209: return tr("PagGiù");
+    case 197: return tr("Pausa");
+    case 70: return tr("Bloc Scorr");
+    case 69: return tr("Bloc Num");
+    case 183: return tr("Stamp");
+    case 57: return tr("Spazio");
+    case 28: return tr("Invio");
     case 14: return "Backspace";
     case 15: return "Tab";
     default: break;
@@ -137,7 +138,7 @@ std::string dik_name(int dik)
     const LONG param = static_cast<LONG>(((scan & 0xFF) << 16) | ((scan & 0xFF00) != 0 ? (1 << 24) : 0));
     if (GetKeyNameTextW(param, name, 64) > 0)
         return to_utf8(name);
-    return "codice " + std::to_string(dik);
+    return tr("codice ") + std::to_string(dik);
 }
 
 void save_hotkeys()
@@ -204,7 +205,7 @@ void handle_hotkeys(reshade::api::effect_runtime *runtime, App &app)
         {
             g_wheel[static_cast<size_t>(g_capturing_wheel)] = binding;
             save_hotkeys();
-            app.toast("Pulsante assegnato: " + wheel::describe(binding) + ". Controlla che rF2 non lo usi.", 5.0);
+            app.toast(tr("Pulsante assegnato: ") + wheel::describe(binding) + tr(". Controlla che rF2 non lo usi."), 5.0);
             g_capturing_wheel = -1;
         }
         return;
@@ -231,8 +232,8 @@ void handle_hotkeys(reshade::api::effect_runtime *runtime, App &app)
             g_keys[static_cast<size_t>(g_capturing)] = dik;
             save_hotkeys();
             const std::string conflict = hotkey_conflict(static_cast<HotkeyAction>(g_capturing));
-            app.toast(conflict.empty() ? "Tasto assegnato: " + dik_name(dik)
-                                       : "Attenzione: " + dik_name(dik) + " è usato anche da rF2 (" + conflict + ")",
+            app.toast(conflict.empty() ? tr("Tasto assegnato: ") + dik_name(dik)
+                                       : tr("Attenzione: ") + dik_name(dik) + tr(" è usato anche da rF2 (") + conflict + ")",
                       conflict.empty() ? 2.0 : 6.0);
             g_capturing = -1;
             break;
@@ -262,7 +263,7 @@ void handle_hotkeys(reshade::api::effect_runtime *runtime, App &app)
     if (pressed(HotkeyAction::ToggleEffects))
     {
         app.master_enabled = !app.master_enabled;
-        app.toast(app.master_enabled ? "Effetti attivi" : "Effetti spenti");
+        app.toast(app.master_enabled ? tr("Effetti attivi") : tr("Effetti spenti"));
     }
     if (pressed(HotkeyAction::PreviousProfile))
         app.next_profile(-1);
@@ -271,7 +272,7 @@ void handle_hotkeys(reshade::api::effect_runtime *runtime, App &app)
     if (pressed(HotkeyAction::Compare))
     {
         app.split_compare = !app.split_compare;
-        app.toast(app.split_compare ? "Confronto A/B: a sinistra l'immagine originale" : "Confronto A/B spento");
+        app.toast(app.split_compare ? tr("Confronto A/B: a sinistra l'immagine originale") : tr("Confronto A/B spento"));
     }
 }
 
@@ -306,7 +307,7 @@ void check_rf2_key_conflicts(const std::filesystem::path &bin64, App &app)
     if (conflicts.empty())
         log::info("Tasti rapidi KarmaTV: nessun conflitto con i comandi di rF2.");
     else
-        app.toast("Attenzione: tasti usati anche da rF2: " + conflicts + ". Cambiali nella pagina Tasti.", 8.0);
+        app.toast(tr("Attenzione: tasti usati anche da rF2: ") + conflicts + tr(". Cambiali nella pagina Tasti."), 8.0);
 }
 
 const char *hotkey_action_label(HotkeyAction action)
@@ -372,9 +373,9 @@ int wheel_device_count()
 
 std::string hotkey_help()
 {
-    return hotkey_name(HotkeyAction::ToggleWindow) + " finestra   ·   " +
-           hotkey_name(HotkeyAction::ToggleEffects) + " effetti on/off   ·   " +
-           hotkey_name(HotkeyAction::PreviousProfile) + " / " + hotkey_name(HotkeyAction::NextProfile) + " profilo   ·   " +
-           hotkey_name(HotkeyAction::Compare) + " confronto A/B";
+    return hotkey_name(HotkeyAction::ToggleWindow) + tr(" finestra") + "   ·   " +
+           hotkey_name(HotkeyAction::ToggleEffects) + tr(" effetti on/off") + "   ·   " +
+           hotkey_name(HotkeyAction::PreviousProfile) + " / " + hotkey_name(HotkeyAction::NextProfile) + tr(" profilo") + "   ·   " +
+           hotkey_name(HotkeyAction::Compare) + tr(" confronto A/B");
 }
 }

@@ -1,0 +1,352 @@
+# KarmaTV PostFX - Português (Brasil)
+# italiano<TAB>traduzione  (\n = a capo, \0 = separatore di lista)
+
+Valori predefiniti ripristinati: salva per mantenerli	Valores padrão restaurados: salve para mantê-los
+Scrivi un nome per il nuovo profilo	Digite um nome para o novo perfil
+Errore nel salvataggio del profilo	Não foi possível salvar o perfil
+Profilo salvato: 	Perfil salvo: 
+I profili fissi non si possono eliminare	Perfis fixos não podem ser excluídos
+Profilo eliminato: 	Perfil excluído: 
+Profilo: 	Perfil: 
+Profilo fisso: salva le modifiche come nuovo profilo	Perfil fixo: salve as alterações como um novo perfil
+Nessuna pista caricata: override non salvato	Nenhuma pista carregada: ajuste não salvo
+Nessuna auto in pista: override non salvato	Nenhum carro na pista: ajuste não salvo
+Errore nel salvataggio del preset	Não foi possível salvar o preset
+Preset salvato: 	Preset salvo: 
+Replay: modifiche non salvate, il profilo non cambia	Replay: alterações não salvas, o perfil não muda
+Replay: profilo 	Replay: perfil 
+Fine replay: profilo 	Fim do replay: perfil 
+All'avvio: 	Ao iniciar: 
+Errore nel salvataggio di avvio.ini	Não foi possível salvar avvio.ini
+Pista o auto cambiata: salva o ricarica il profilo per applicare gli override	Pista ou carro mudou: salve ou recarregue o perfil para aplicar os ajustes
+Override caricato: 	Ajuste carregado: 
+Variante 	Variante 
+: profilo 	: perfil 
+KarmaTV PostFX 	KarmaTV PostFX 
+ disponibile: apri il menu (Canc) per aggiornare	 disponível: abra o menu (Delete) para atualizar
+nessuno	nenhuma
+Canc	Delete
+Ins	Insert
+Inizio	Home
+Fine	End
+PagSu	Page Up
+PagGiù	Page Down
+Pausa	Pause
+Bloc Scorr	Scroll Lock
+Bloc Num	Num Lock
+Stamp	Print Screen
+Spazio	Espaço
+Invio	Enter
+codice 	código 
+Pulsante assegnato: 	Botão atribuído: 
+. Controlla che rF2 non lo usi.	. Verifique se o rF2 não o usa.
+Tasto assegnato: 	Tecla atribuída: 
+Attenzione: 	Atenção: 
+ è usato anche da rF2 (	 também é usada pelo rF2 (
+Effetti attivi	Efeitos ativados
+Effetti spenti	Efeitos desativados
+Confronto A/B: a sinistra l'immagine originale	Comparação A/B: à esquerda a imagem original
+Confronto A/B spento	Comparação A/B desativada
+Attenzione: tasti usati anche da rF2: 	Atenção: teclas também usadas pelo rF2: 
+. Cambiali nella pagina Tasti.	. Altere-as na página Teclas.
+ finestra	 menu
+ effetti on/off	 efeitos liga/desliga
+ profilo	 perfil
+ confronto A/B	 comparação A/B
+controller non collegato	controle não conectado
+, pulsante 	, botão 
+ (stima)	 (estimativa)
+Effetti	Efeitos
+Profili	Perfis
+Automatismi	Automações
+Broadcast	Transmissão
+Prestazioni	Desempenho
+Tasti	Teclas
+Nessun effetto, grafica di rF2	Sem efeitos, gráficos do rF2
+Guida su monitor	Pilotagem no monitor
+Replay e regia	Replays e transmissão
+Visore, effetti leggeri	Óculos VR, efeitos leves
+Profilo fisso	Perfil fixo
+Profilo personale	Seu perfil
+KARMA TV	KARMA TV
+OVERRIDE AUTO	AJUSTE CARRO
+OVERRIDE PISTA	AJUSTE PISTA
+EFFETTI ATTIVI	EFEITOS ATIVADOS
+EFFETTI SPENTI	EFEITOS DESATIVADOS
+Chiudi avanzate	Fechar avançado
+Avanzate	Avançado
+Effetti KarmaTV attivi	Efeitos KarmaTV ativados
+Effetti KarmaTV spenti	Efeitos KarmaTV desativados
+NUOVA VERSIONE 	NOVA VERSÃO 
+ DISPONIBILE	 DISPONÍVEL
+DOWNLOAD DELLA VERSIONE 	BAIXANDO A VERSÃO 
+VERSIONE 	VERSÃO 
+ PRONTA	 PRONTA
+AGGIORNAMENTO NON RIUSCITO	FALHA NA ATUALIZAÇÃO
+Ora usi la 	Você usa a 
+. Si installa da solo quando chiudi rF2.	. Ela se instala sozinha quando você fecha o rF2.
+Si installa quando chiudi rFactor 2 (Windows chiederà il permesso).	Instala quando você fecha o rFactor 2 (o Windows pedirá permissão).
+Aggiorna	Atualizar
+Riprova	Tentar de novo
+Annulla	Cancelar
+Novità	Novidades
+Grafica	Gráficos
+Gara	Corrida
+Sistema	Sistema
+in arrivo, fase %d	em breve, fase %d
+escluso in VR	excluído em VR
+riavvia rF2	reinicie o rF2
+%.2f ms	%.2f ms
+~%.1f ms	~%.1f ms
+Reset	Redefinir
+vale dal prossimo caricamento della pista	vale a partir do próximo carregamento da pista
+caricato: auto	carregado: carro
+caricato: pista	carregado: pista
+si salvano dalla pagina Profili	salvos na página Perfis
+segue tonemap e LUT	segue tonemap e LUT
+Livello anisotropico	Nível anisotrópico
+Spostamento LOD (negativo = più nitido)	Viés de LOD (negativo = mais nítido)
+Bind del back buffer dopo la scena (consigliato 2, 0 = fine frame)	Bind do back buffer após a cena (recomendado 2, 0 = fim do frame)
+Frame: %d bind del back buffer, %d dopo la scena, %d draw	Frame: %d binds do back buffer, %d após a cena, %d draws
+Analisi in corso...	Analisando...
+Analizza un frame	Analisar um frame
+Analisi del frame scritta in ReShade.log	Análise do frame gravada em ReShade.log
+Che profilo usi?	Qual perfil?
+Avvio del gioco	Início do jogo
+Questo profilo si carica all'avvio di rF2 (	Este perfil carrega ao iniciar o rF2 (
+Usa all'avvio	Usar ao iniciar
+Ora all'avvio si carica: 	Carregado ao iniciar: 
+Profili fissi con il lucchetto: puoi provare modifiche, ma si salvano solo come nuovo profilo. In verde i tuoi profili.	Perfis fixos têm cadeado: você pode testar alterações, mas elas só são salvas como novo perfil. Seus perfis ficam em verde.
+Originale rF2: tutti gli effetti KarmaTV sono spenti, anche quelli degli automatismi.	rF2 Original: todos os efeitos KarmaTV estão desativados, inclusive as automações.
+AutoHDR resta acceso ma neutro (solo conversione in HDR, nessuna espansione). Per la grafica originale al 100%: spegni AutoHDR in Effetti e riavvia rF2.	O AutoHDR continua ativo, mas neutro (só conversão para HDR, sem expansão). Para gráficos 100% originais: desative o AutoHDR em Efeitos e reinicie o rF2.
+Il filtro anisotropico resta forzato: per toglierlo spegnilo in Effetti e ricarica la pista.	O filtro anisotrópico continua forçado: para removê-lo, desative-o em Efeitos e recarregue a pista.
+Nuovo profilo	Novo perfil
+Nome del profilo (es. Daytona sera)	Nome do perfil (ex.: Daytona noite)
+Salva come nuovo profilo	Salvar como novo perfil
+Salva tutte le regolazioni attuali con il nome scritto, per la variante attiva (Monitor o VR).	Salva todos os ajustes atuais com esse nome, para a variante ativa (Monitor ou VR).
+Elimina questo profilo	Excluir este perfil
+Variante	Variante
+Automatica	Automática
+Monitor	Monitor
+Rilevata automaticamente: %s	Detectada automaticamente: %s
+Salvataggio	Salvamento
+Profilo fisso: non si sovrascrive. Per tenere le modifiche salvale come nuovo profilo (qui sopra o con il pulsante in basso a destra).	Perfil fixo: não é sobrescrito. Para manter as alterações, salve-as como novo perfil (acima ou com o botão no canto inferior direito).
+Annulla modifiche	Descartar alterações
+Ci sono modifiche non salvate.	Há alterações não salvas.
+Impostazioni di sistema (AutoHDR, HUD, profondità...) salvate da sole in: 	Configurações do sistema (AutoHDR, HUD, profundidade...) salvas automaticamente em: 
+\\sistema.ini	\\sistema.ini
+Salva profilo	Salvar perfil
+Salva solo per questa pista	Salvar só para esta pista
+Salva solo per questa auto	Salvar só para este carro
+Ripristina valori predefiniti	Restaurar valores padrão
+Override auto attivo: 	Ajuste de carro ativo: 
+Override pista attivo: 	Ajuste de pista ativo: 
+Pista: 	Pista: 
+Auto: 	Carro: 
+  (l'override per pista ha la precedenza su quello per auto)	  (o ajuste de pista tem prioridade sobre o de carro)
+Cartella dei preset: 	Pasta de presets: 
+Telemetria	Telemetria
+Collegata	Conectada
+Pista: %s   |   Auto: %s	Pista: %s   |   Carro: %s
+Ora in pista %02d:%02d   |   Pioggia %.0f%%   |   Bagnato %.0f%%   |   Nuvole %.0f%%   |   Ai box: %s	Hora na pista %02d:%02d   |   Chuva %.0f%%   |   Molhado %.0f%%   |   Nuvens %.0f%%   |   Nos boxes: %s
+sì	sim
+no	não
+Non collegata	Não conectada
+Attiva rF2SharedMemoryMapPlugin. I profili manuali funzionano comunque.	Ative o rF2SharedMemoryMapPlugin. Os perfis manuais funcionam mesmo assim.
+Regole	Regras
+Automatismi attivi	Automações ativadas
+Effetti nei replay	Efeitos nos replays
+Replay in corso	Replay em andamento
+Nessuno (resta quello attivo)	Nenhum (mantém o ativo)
+Profilo nei replay e nel monitor di gara	Perfil nos replays e no monitor de corrida
+in uso ora	em uso agora
+Quando parte un replay o guardi la gara a schermo intero dal monitor, KarmaTV passa a questo profilo e, finito il replay, torna a quello di prima. Serve "Effetti nei replay" acceso.	Quando um replay começa ou você assiste à corrida em tela cheia pelo monitor, o KarmaTV muda para este perfil e, no fim, volta ao anterior. Requer "Efeitos nos replays" ativado.
+in arrivo, fase 2	em breve, fase 2
+Uscita pulita per OBS (Spout2)	Saída limpa para OBS (Spout2)
+Clean feed Spout2	Sinal limpo Spout2
+Disponibile solo nella variante Monitor.	Disponível só na variante Monitor.
+In onda %ux%u	No ar %ux%u
+In attesa del primo frame	Aguardando o primeiro frame
+Invia a OBS la scena con gli effetti ma senza HUD, specchietto virtuale e finestra KarmaTV.	Envia ao OBS a cena com os efeitos, mas sem HUD, retrovisor virtual e menu KarmaTV.
+In OBS: plugin Spout2, sorgente "Spout2 Capture", sender "KarmaTV rF2".	No OBS: plugin Spout2, fonte "Spout2 Capture", emissor "KarmaTV rF2".
+Senza esclusione HUD (o nei menu) viene inviata l'immagine intera.	Sem exclusão do HUD (ou nos menus) a imagem inteira é enviada.
+Regia	Direção
+Preset regia (Replay)	Preset de direção (Replay)
+Profilo Replay Karma FX: profondità di campo, motion blur, antialiasing	Perfil Replay Karma FX: profundidade de campo, motion blur, antialiasing
+Il profilo Replay Karma FX esiste solo nella variante Monitor	O perfil Replay Karma FX só existe na variante Monitor
+Screenshot	Captura de tela
+Screenshot salvato nella cartella degli screenshot di ReShade	Captura salva na pasta de capturas do ReShade
+Lo screenshot viene salvato con gli effetti, senza la finestra KarmaTV.	A captura é salva com os efeitos, sem o menu KarmaTV.
+Riepilogo	Resumo
+FPS: %.0f	FPS: %.0f
+Tempo GPU degli effetti KarmaTV: %.2f ms	Tempo de GPU dos efeitos KarmaTV: %.2f ms
+Profiler GPU non disponibile: i valori sono stime.	Profiler de GPU indisponível: os valores são estimativas.
+Budget (ms)	Orçamento (ms)
+Effetto	Efeito
+Stima	Estimativa
+Misurato	Medido
+%.1f - %.1f ms	%.1f - %.1f ms
+Picchi	Picos
+Picchi registrati in questa sessione: %d	Picos registrados nesta sessão: %d
+Ogni picco (frame lungo o effetti molto piu' costosi del solito) finisce in ReShade.log con il costo di ogni effetto e cosa era appena cambiato.	Cada pico (frame longo ou efeitos bem mais caros que o normal) vai para o ReShade.log com o custo de cada efeito e o que tinha acabado de mudar.
+Diagnostica	Diagnóstico
+Vista profondità	Visão de profundidade
+corretta se gli oggetti vicini sono scuri e l'orizzonte chiaro	correta se os objetos próximos são escuros e o horizonte claro
+Profondità KarmaTV: errore, %s	Profundidade KarmaTV: erro, %s
+Profondità KarmaTV: %u x %u, MSAA %ux, %s, %llu copie	Profundidade KarmaTV: %u x %u, MSAA %ux, %s, %llu cópias
+invertita (rilevata)	invertida (detectada)
+normale (rilevata)	normal (detectada)
+verso non ancora rilevato	sentido ainda não detectado
+Profondità KarmaTV: nessun depth buffer MSAA trovato (serve riavviare rF2 dopo l'installazione)	Profundidade KarmaTV: nenhum depth buffer MSAA encontrado (reinicie o rF2 após a instalação)
+Verso della profondità	Sentido da profundidade
+Automatico	Automático
+Normale	Normal
+Invertito	Invertido
+Distanza massima (m)	Distância máxima (m)
+Immagine elaborata da ReShade: %u x %u   |   Effetti ReShade: %s	Imagem processada pelo ReShade: %u x %u   |   Efeitos ReShade: %s
+attivi	ativos
+SPENTI	DESATIVADOS
+Shader	Shader
+Trovato	Encontrado
+Richiesto	Solicitado
+In ReShade	No ReShade
+acceso	ligado
+spento	desligado
+Tasti rapidi	Teclas de atalho
+rF2 legge la tastiera per conto suo e ignora Ctrl, Alt e Maiusc: usa solo tasti che rF2 non ha assegnato.	O rF2 lê o teclado por conta própria e ignora Ctrl, Alt e Shift: use só teclas que o rF2 não tenha atribuído.
+Azione	Ação
+Tasto	Tecla
+usato da rF2: 	usada pelo rF2: 
+Premi un tasto...	Pressione uma tecla...
+Cambia	Alterar
+Ripristina tasti predefiniti	Restaurar teclas padrão
+Tasti predefiniti ripristinati	Teclas padrão restauradas
+Pulsanti del volante	Botões do volante
+Controller collegati: %d. Usa pulsanti che non hai assegnato in rF2.	Controles conectados: %d. Use botões que você não atribuiu no rF2.
+Pulsante	Botão
+Premi un pulsante...	Pressione um botão...
+Togli	Remover
+Esc annulla la scelta di un tasto o di un pulsante. Tutto è salvato in KarmaTV-PostFX\\tasti.ini.	Esc cancela a escolha de uma tecla ou botão. Tudo é salvo em KarmaTV-PostFX\\tasti.ini.
+Le modifiche a 	As alterações em 
+ diventano un profilo nuovo.	 viram um novo perfil.
+Il profilo fisso resta com'era.	O perfil fixo continua como estava.
+È il nome di un profilo fisso: scegline un altro.	É o nome de um perfil fixo: escolha outro.
+Salva	Salvar
+Controllo...	Verificando...
+Aggiornato · Controlla	Atualizado · Verificar
+Controlla aggiornamenti	Verificar atualizações
+Salva modifiche	Salvar alterações
+Torna ai profili	Voltar aos perfis
+Personalizza i tasti	Personalizar teclas
+Tasti della tastiera e pulsanti del volante per menu, effetti e profili.	Teclas do teclado e botões do volante para menu, efeitos e perfis.
+Tonemapper	Tonemapper
+Neutro	Neutro
+ACES	ACES
+AgX	AgX
+Generale	Geral
+Esposizione (EV)	Exposição (EV)
+Recupero alte luci	Recuperação de altas luzes
+Esposizione automatica	Exposição automática
+Velocità di adattamento	Velocidade de adaptação
+Cruscotto (strumenti, volante, plancia)	Painel (instrumentos, volante, painel)
+Alte luci	Altas luzes
+Abitacolo (montanti, tetto, fianchi)	Cockpit (colunas, teto, laterais)
+Pista	Pista
+Sfondo e cielo	Fundo e céu
+Mostra le zone a colori	Mostrar as zonas em cores
+No	Não
+Sì	Sim
+Confini delle zone	Limites das zonas
+Cruscotto: centro (orizzontale)	Painel: centro (horizontal)
+Cruscotto: larghezza	Painel: largura
+Cruscotto: bordo alto (0 = in alto)	Painel: borda superior (0 = no topo)
+Cruscotto: bordo basso	Painel: borda inferior
+Fine dell'abitacolo (profondità)	Fim do cockpit (profundidade)
+Inizio dello sfondo (m)	Início do fundo (m)
+Soglia	Limiar
+Morbidezza della soglia	Suavidade do limiar
+Temperatura (freddo - caldo)	Temperatura (frio - quente)
+Bilanciamento del bianco	Balanço de branco
+Tinta (verde - magenta)	Matiz (verde - magenta)
+Vibrance	Vibração
+Colore	Cor
+Saturazione	Saturação
+Contrasto (curva a S)	Contraste (curva em S)
+LUT	LUT
+Neutra	Neutra
+Broadcast TV	Transmissão de TV
+Pomeriggio caldo	Tarde quente
+Nuvoloso freddo	Nublado frio
+Cinematica	Cinematográfica
+Notte	Noite
+Stile DLSS5	Estilo DLSS5
+Personale 2	Pessoal 2
+Personale 3	Pessoal 3
+Personale 4	Pessoal 4
+Intensità della LUT	Intensidade da LUT
+Visibilità (m)	Visibilidade (m)
+Foschia sul cielo	Névoa no céu
+Tinta (fredda - neutra - calda)	Matiz (fria - neutra - quente)
+Luminosità della foschia	Brilho da névoa
+Raggio (m)	Raio (m)
+Solo nelle zone scure	Só nas áreas escuras
+Campo visivo verticale (gradi)	Campo de visão vertical (graus)
+Picco del monitor (nit)	Pico do monitor (nits)
+Bianco carta (nit)	Branco papel (nits)
+Saturazione HDR	Saturação HDR
+Soglia (solo luci forti)	Limiar (só luzes fortes)
+Lunghezza dei raggi	Comprimento dos raios
+Luminosità del cielo (EV)	Brilho do céu (EV)
+Azzurro	Azul
+Contrasto delle nuvole	Contraste das nuvens
+Sfumatura verso l'orizzonte	Degradê até o horizonte
+Riduzione del rumore	Redução de ruído
+Sensibilità ai bordi	Sensibilidade às bordas
+Scia massima (% dello schermo)	Rastro máximo (% da tela)
+Profondità del fuoco	Profundidade de foco
+Velocità della messa a fuoco	Velocidade do foco
+Aberrazione cromatica	Aberração cromática
+Grana	Granulação
+Sporco sulla lente	Sujeira na lente
+Vista	Visão
+Profondità	Profundidade
+Normali ricostruite	Normais reconstruídas
+Metà immagine, metà profondità	Metade imagem, metade profundidade
+Tonemapping ed esposizione	Tonemapping e exposição
+Bloom	Bloom
+AutoHDR (HDR10, picco 1000 nit)	AutoHDR (HDR10, pico de 1000 nits)
+Riflessi a stella sui fari	Reflexos em estrela nos faróis
+LUT, bilanciamento del bianco, vibrance, curve	LUT, balanço de branco, vibração, curvas
+Preset automatici per pista e auto	Presets automáticos por pista e carro
+Sharpening CAS	Nitidez CAS
+Filtro anisotropico e LOD forzati	Filtro anisotrópico e LOD forçados
+Nitidezza FSR 1 (RCAS, alternativa al CAS)	Nitidez FSR 1 (RCAS, alternativa ao CAS)
+Antialiasing post (reti, alberi, linee sottili)	Antialiasing pós (grades, árvores, linhas finas)
+Occlusione ambientale GTAO	Oclusão ambiente GTAO
+Cielo (solo il cielo: luminosità, azzurro, nuvole)	Céu (só o céu: brilho, azul, nuvens)
+Nebbia e foschia atmosferica	Neblina e névoa atmosférica
+Profondità di campo (replay)	Profundidade de campo (replay)
+Luce indiretta (SSGI)	Luz indireta (SSGI)
+Aberrazione cromatica, grana, sporco lente	Aberração cromática, granulação, sujeira na lente
+Motion blur della camera (replay)	Motion blur da câmera (replay)
+Esclusione dell'HUD dagli effetti	Excluir o HUD dos efeitos
+Viste di debug (depth, normali)	Visões de depuração (profundidade, normais)
+Specchietto virtuale con i colori della scena	Retrovisor virtual com as cores da cena
+Luce e HDR	Luz e HDR
+Nitidezza, anti-aliasing e scaling	Nitidez, anti-aliasing e escala
+Ray tracing in screen-space	Ray tracing em espaço de tela
+Camera e lente	Câmera e lente
+Interventi sul rendering di rF2	Ajustes na renderização do rF2
+Apri / chiudi la finestra	Abrir / fechar o menu
+Effetti on / off	Efeitos liga / desliga
+Profilo precedente	Perfil anterior
+Profilo successivo	Próximo perfil
+Confronto A/B	Comparação A/B
+Impronta dell'aggiornamento non scaricata.	Não foi possível baixar a assinatura da atualização.
+Download dell'aggiornamento non riuscito.	Falha no download da atualização.
+L'installer scaricato non corrisponde all'impronta: aggiornamento annullato.	O instalador baixado não corresponde à assinatura: atualização cancelada.
+Impossibile salvare l'installer scaricato.	Não foi possível salvar o instalador baixado.
+Impossibile preparare l'installazione automatica.	Não foi possível preparar a instalação automática.
+Originale rF2	rF2 Original
+PROFILO	PERFIL
+AVVIO	INÍCIO

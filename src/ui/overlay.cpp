@@ -8,6 +8,7 @@
 #include "render/frame_hooks.hpp"
 #include "input/hotkeys.hpp"
 #include "ui/logo.hpp"
+#include "core/i18n.hpp"
 #include "update/updater.hpp"
 
 #include <algorithm>
@@ -47,12 +48,12 @@ const char *page_label(Page page)
 {
     switch (page)
     {
-    case Page::Effects: return "Effetti";
-    case Page::Profiles: return "Profili";
-    case Page::Rules: return "Automatismi";
-    case Page::Broadcast: return "Broadcast";
-    case Page::Performance: return "Prestazioni";
-    case Page::Keys: return "Tasti";
+    case Page::Effects: return tr("Effetti");
+    case Page::Profiles: return tr("Profili");
+    case Page::Rules: return tr("Automatismi");
+    case Page::Broadcast: return tr("Broadcast");
+    case Page::Performance: return tr("Prestazioni");
+    case Page::Keys: return tr("Tasti");
     }
     return "";
 }
@@ -70,11 +71,11 @@ const char *profile_label(const std::string &name)
 
 const char *profile_description(const App &a, const std::string &name)
 {
-    if (name == "Originale rF2") return "Nessun effetto, grafica di rF2";
-    if (name == "Karma FX") return "Guida su monitor";
-    if (name == "Replay Karma FX") return "Replay e regia";
-    if (name == "VR Karma FX") return "Visore, effetti leggeri";
-    return a.is_builtin_profile(name) ? "Profilo fisso" : "Profilo personale";
+    if (name == "Originale rF2") return tr("Nessun effetto, grafica di rF2");
+    if (name == "Karma FX") return tr("Guida su monitor");
+    if (name == "Replay Karma FX") return tr("Replay e regia");
+    if (name == "VR Karma FX") return tr("Visore, effetti leggeri");
+    return a.is_builtin_profile(name) ? tr("Profilo fisso") : tr("Profilo personale");
 }
 
 bool *feature_flag(Profile &profile, std::string_view id)
@@ -137,7 +138,7 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     if (!logo::draw(rt, logo_height))
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
-        ImGui::TextUnformatted("KARMA TV");
+        ImGui::TextUnformatted(tr("KARMA TV"));
         ImGui::PopStyleColor(1);
     }
     ImGui::SameLine(0.0f, 14.0f * s);
@@ -150,10 +151,10 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     // Stato: profilo e variante
     ImGui::SameLine(0.0f, 26.0f * s);
     ImGui::SetCursorPosY(row_top + (row_height - ImGui::GetTextLineHeight()) * 0.5f);
-    text_dim("PROFILO");
+    text_dim(tr("PROFILO"));
     ImGui::SameLine(0.0f, 6.0f * s);
     ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
-    ImGui::TextUnformatted(theme::upper(a.profile.name.c_str()).c_str());
+    ImGui::TextUnformatted(theme::upper(tr(a.profile.name.c_str())).c_str());
     ImGui::PopStyleColor(1);
     ImGui::SameLine(0.0f, 6.0f * s);
     text_dim((std::string("· ") + theme::upper(variant_name(a.active_variant()))).c_str());
@@ -161,19 +162,39 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     {
         ImGui::SameLine(0.0f, 10.0f * s);
         ImGui::PushStyleColor(ImGuiCol_Text, col::good);
-        ImGui::TextUnformatted(a.override_is_car ? "OVERRIDE AUTO" : "OVERRIDE PISTA");
+        ImGui::TextUnformatted(a.override_is_car ? tr("OVERRIDE AUTO") : tr("OVERRIDE PISTA"));
         ImGui::PopStyleColor(1);
     }
 
     // A destra: "Avanzate" e interruttore generale
-    const char *master_label = a.master_enabled ? "EFFETTI ATTIVI" : "EFFETTI SPENTI";
-    const char *advanced_label = g_advanced ? "Chiudi avanzate" : "Avanzate";
+    const char *master_label = a.master_enabled ? tr("EFFETTI ATTIVI") : tr("EFFETTI SPENTI");
+    const char *advanced_label = g_advanced ? tr("Chiudi avanzate") : tr("Avanzate");
     const float label_width = ImGui::CalcTextSize(master_label, nullptr, false, -1.0f).x;
     const float toggle_width = ImGui::GetFrameHeight() * 0.66f * 2.1f;
     const float advanced_width = theme::button_width(advanced_label, theme::Icon::Sliders);
+    const std::string lang_label = theme::upper(i18n::current()) + "##lang";
+    const float lang_width = theme::button_width(lang_label.c_str(), theme::Icon::Broadcast);
     ImGui::SameLine();
     const float right = ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x;
-    ImGui::SetCursorPosX(right - label_width - toggle_width - advanced_width - style.ItemSpacing.x * 2.0f - 20.0f * s);
+    ImGui::SetCursorPosX(right - label_width - toggle_width - advanced_width - lang_width - style.ItemSpacing.x * 3.0f - 20.0f * s);
+    ImGui::SetCursorPosY(row_top + (row_height - (ImGui::GetFrameHeight() + 4.0f * s)) * 0.5f);
+    if (theme::button(lang_label.c_str(), theme::Look::Normal, theme::Icon::Broadcast))
+        ImGui::OpenPopup("##language_menu", 0);
+    if (ImGui::BeginPopup("##language_menu", 0))
+    {
+        int count = 0;
+        const i18n::Language *list = i18n::languages(&count);
+        for (int i = 0; i < count; ++i)
+        {
+            const bool selected = std::string_view(list[i].code) == i18n::current();
+            ImGui::PushStyleColor(ImGuiCol_Text, selected ? col::accent : col::text);
+            if (ImGui::Selectable(list[i].name, selected, 0, ImVec2(220.0f * s, 0.0f)) && !selected)
+                a.set_language(list[i].code);
+            ImGui::PopStyleColor(1);
+        }
+        ImGui::EndPopup();
+    }
+    ImGui::SameLine();
     ImGui::SetCursorPosY(row_top + (row_height - (ImGui::GetFrameHeight() + 4.0f * s)) * 0.5f);
     if (theme::button(advanced_label, g_advanced ? theme::Look::Primary : theme::Look::Outline, theme::Icon::Sliders))
         g_advanced = !g_advanced;
@@ -186,7 +207,7 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     ImGui::SameLine();
     ImGui::SetCursorPosY(row_top + (row_height - ImGui::GetFrameHeight()) * 0.5f);
     if (theme::toggle("##master", &a.master_enabled))
-        a.toast(a.master_enabled ? "Effetti KarmaTV attivi" : "Effetti KarmaTV spenti");
+        a.toast(a.master_enabled ? tr("Effetti KarmaTV attivi") : tr("Effetti KarmaTV spenti"));
     ImGui::SetCursorPosY(row_top + row_height + style.ItemSpacing.y);
 
     bool measured = false;
@@ -223,10 +244,10 @@ void draw_update_banner()
     std::string title;
     switch (u.state)
     {
-    case update::State::Available: title = "NUOVA VERSIONE " + u.version + " DISPONIBILE"; break;
-    case update::State::Downloading: title = "DOWNLOAD DELLA VERSIONE " + u.version + "..."; break;
-    case update::State::Scheduled: title = "VERSIONE " + u.version + " PRONTA"; break;
-    default: title = "AGGIORNAMENTO NON RIUSCITO"; break;
+    case update::State::Available: title = tr("NUOVA VERSIONE ") + u.version + tr(" DISPONIBILE"); break;
+    case update::State::Downloading: title = tr("DOWNLOAD DELLA VERSIONE ") + u.version + "..."; break;
+    case update::State::Scheduled: title = tr("VERSIONE ") + u.version + tr(" PRONTA"); break;
+    default: title = tr("AGGIORNAMENTO NON RIUSCITO"); break;
     }
     ImGui::PushStyleColor(ImGuiCol_Text, u.state == update::State::Failed ? col::bad : col::good);
     ImGui::TextUnformatted(title.c_str());
@@ -236,7 +257,7 @@ void draw_update_banner()
     switch (u.state)
     {
     case update::State::Available:
-        text_dim((std::string("Ora usi la ") + update::current_version() + ". Si installa da solo quando chiudi rF2.").c_str());
+        text_dim((std::string(tr("Ora usi la ")) + update::current_version() + tr(". Si installa da solo quando chiudi rF2.")).c_str());
         break;
     case update::State::Downloading:
     {
@@ -246,16 +267,16 @@ void draw_update_banner()
         break;
     }
     case update::State::Scheduled:
-        text_dim("Si installa quando chiudi rFactor 2 (Windows chiederà il permesso).");
+        text_dim(tr("Si installa quando chiudi rFactor 2 (Windows chiederà il permesso)."));
         break;
     default:
-        text_dim(u.message.c_str());
+        text_dim(tr(u.message.c_str()));
         break;
     }
 
     // Pulsanti a destra
-    const char *primary = u.state == update::State::Available ? "Aggiorna" : (u.state == update::State::Failed ? "Riprova" : nullptr);
-    const char *secondary = u.state == update::State::Scheduled ? "Annulla" : "Novità";
+    const char *primary = u.state == update::State::Available ? tr("Aggiorna") : (u.state == update::State::Failed ? tr("Riprova") : nullptr);
+    const char *secondary = u.state == update::State::Scheduled ? tr("Annulla") : tr("Novità");
     float buttons = theme::button_width(secondary, theme::Icon::None) + 12.0f * s;
     if (primary != nullptr)
         buttons += theme::button_width(primary, theme::Icon::Save);
@@ -337,13 +358,13 @@ void nav_group(const char *title, bool first)
 void draw_navigation()
 {
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 4.0f * theme::scale()));
-    nav_group("Grafica", true);
+    nav_group(tr("Grafica"), true);
     nav_item(Page::Effects);
     nav_item(Page::Profiles);
-    nav_group("Gara", false);
+    nav_group(tr("Gara"), false);
     nav_item(Page::Rules);
     nav_item(Page::Broadcast);
-    nav_group("Sistema", false);
+    nav_group(tr("Sistema"), false);
     nav_item(Page::Performance);
     nav_item(Page::Keys);
     ImGui::PopStyleVar(1);
@@ -359,7 +380,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
     for (int c = 0; c < static_cast<int>(Category::Count); ++c)
     {
         const Category category = static_cast<Category>(c);
-        theme::section(category_label(category));
+        theme::section(tr(category_label(category)));
 
         ImGui::PushID(c);
         if (ImGui::BeginTable("effects", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
@@ -391,7 +412,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                     bool expanded = g_expanded.count(e.id) != 0;
                     if (has_params)
                     {
-                        if (ImGui::SmallButton(expanded ? "-##params" : "+##params"))
+                        if (ImGui::SmallButton(expanded ? tr("-##params") : tr("+##params")))
                         {
                             expanded = !expanded;
                             if (expanded) g_expanded.insert(e.id);
@@ -400,18 +421,18 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         ImGui::SameLine();
                     }
                     ImGui::AlignTextToFramePadding();
-                    ImGui::TextUnformatted(e.label);
+                    ImGui::TextUnformatted(tr(e.label));
                     if (!found)
                     {
                         ImGui::SameLine();
                         char note[48];
-                        std::snprintf(note, sizeof(note), "in arrivo, fase %d", e.phase);
+                        std::snprintf(note, sizeof(note), tr("in arrivo, fase %d"), e.phase);
                         theme::chip(note, col::surface_high, col::text_dim);
                     }
                     else if (vr && !e.vr_allowed)
                     {
                         ImGui::SameLine();
-                        theme::chip("escluso in VR", col::surface_high, col::text_dim);
+                        theme::chip(tr("escluso in VR"), col::surface_high, col::text_dim);
                     }
                     else if (e.phase >= 3)
                     {
@@ -422,7 +443,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                     {
                         ImGui::SameLine();
                         if (frame::hdr_restart_needed())
-                            theme::chip("riavvia rF2", ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
+                            theme::chip(tr("riavvia rF2"), ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
                         else if (frame::hdr_active())
                             theme::chip("attivo", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                     }
@@ -439,7 +460,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         bool measured = false;
                         const float ms = effect_cost(a, rt, e, &measured);
                         char value[32];
-                        std::snprintf(value, sizeof(value), measured ? "%.2f ms" : "~%.1f ms", ms);
+                        std::snprintf(value, sizeof(value), measured ? tr("%.2f ms") : tr("~%.1f ms"), ms);
                         ImGui::TextUnformatted(value);
                     }
                     else
@@ -463,7 +484,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                                 ImGui::TableSetColumnIndex(1);
                                 ImGui::Indent(18.0f * s);
                                 ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
-                                const std::string title = std::string(group_open ? "-  " : "+  ") + param.group;
+                                const std::string title = std::string(group_open ? "-  " : "+  ") + tr(param.group);
                                 if (ImGui::Selectable(title.c_str(), false, ImGuiSelectableFlags_SpanAllColumns, ImVec2(0.0f, 0.0f)))
                                 {
                                     if (group_open) g_closed_groups.insert(key);
@@ -482,7 +503,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                             ImGui::TableSetColumnIndex(1);
                             ImGui::AlignTextToFramePadding();
                             ImGui::Indent((param_has_groups(e) ? 40.0f : 28.0f) * s);
-                            text_dim(param.label);
+                            text_dim(tr(param.label));
                             ImGui::Unindent((param_has_groups(e) ? 40.0f : 28.0f) * s);
 
                             ImGui::TableSetColumnIndex(2);
@@ -491,7 +512,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                             if (param.items != nullptr)
                             {
                                 int index = static_cast<int>(value + 0.5f);
-                                if (ImGui::Combo("##param", &index, param.items, -1))
+                                if (ImGui::Combo("##param", &index, tr_items(param.items), -1))
                                 {
                                     setting.params[param.uniform] = static_cast<float>(index);
                                     a.dirty = true;
@@ -504,7 +525,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                             }
 
                             ImGui::TableSetColumnIndex(3);
-                            if (ImGui::SmallButton("Reset"))
+                            if (ImGui::SmallButton(tr("Reset")))
                             {
                                 setting.params.erase(param.uniform);
                                 a.dirty = true;
@@ -533,21 +554,21 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
 
                     ImGui::TableSetColumnIndex(1);
                     ImGui::AlignTextToFramePadding();
-                    ImGui::TextUnformatted(e.label);
+                    ImGui::TextUnformatted(tr(e.label));
                     const bool is_hud = std::string_view(e.id) == "hud_exclusion";
                     const bool is_af = std::string_view(e.id) == "af_lod";
                     if (is_af)
                     {
                         ImGui::SameLine();
-                        theme::chip("vale dal prossimo caricamento della pista", col::surface_high, col::text_dim);
+                        theme::chip(tr("vale dal prossimo caricamento della pista"), col::surface_high, col::text_dim);
                     }
                     else if (std::string_view(e.id) == "auto_presets")
                     {
                         ImGui::SameLine();
                         if (!a.loaded_override.empty())
-                            theme::chip(a.override_is_car ? "caricato: auto" : "caricato: pista", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+                            theme::chip(a.override_is_car ? tr("caricato: auto") : tr("caricato: pista"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                         else
-                            theme::chip("si salvano dalla pagina Profili", col::surface_high, col::text_dim);
+                            theme::chip(tr("si salvano dalla pagina Profili"), col::surface_high, col::text_dim);
                     }
                     else if (std::string_view(e.id) == "mirrors")
                     {
@@ -555,13 +576,13 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         if (frame::mirror_graded())
                             theme::chip("applicato", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                         else
-                            theme::chip("segue tonemap e LUT", col::surface_high, col::text_dim);
+                            theme::chip(tr("segue tonemap e LUT"), col::surface_high, col::text_dim);
                     }
                     else if (!is_hud)
                     {
                         ImGui::SameLine();
                         char note[48];
-                        std::snprintf(note, sizeof(note), "in arrivo, fase %d", e.phase);
+                        std::snprintf(note, sizeof(note), tr("in arrivo, fase %d"), e.phase);
                         theme::chip(note, col::surface_high, col::text_dim);
                     }
                     else if (frame::last_frame().hook_fired)
@@ -581,7 +602,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         ImGui::TableSetColumnIndex(1);
                         ImGui::AlignTextToFramePadding();
                         ImGui::Indent(28.0f * s);
-                        text_dim("Livello anisotropico");
+                        text_dim(tr("Livello anisotropico"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
                         ImGui::SetNextItemWidth(-1.0f);
@@ -592,7 +613,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         ImGui::TableSetColumnIndex(1);
                         ImGui::AlignTextToFramePadding();
                         ImGui::Indent(28.0f * s);
-                        text_dim("Spostamento LOD (negativo = più nitido)");
+                        text_dim(tr("Spostamento LOD (negativo = più nitido)"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
                         ImGui::SetNextItemWidth(-1.0f);
@@ -607,7 +628,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         ImGui::TableSetColumnIndex(1);
                         ImGui::AlignTextToFramePadding();
                         ImGui::Indent(28.0f * s);
-                        text_dim("Bind del back buffer dopo la scena (consigliato 2, 0 = fine frame)");
+                        text_dim(tr("Bind del back buffer dopo la scena (consigliato 2, 0 = fine frame)"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
                         ImGui::SetNextItemWidth(-1.0f);
@@ -618,17 +639,17 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         ImGui::TableSetColumnIndex(1);
                         ImGui::Indent(28.0f * s);
                         char stats[128];
-                        std::snprintf(stats, sizeof(stats), "Frame: %d bind del back buffer, %d dopo la scena, %d draw",
+                        std::snprintf(stats, sizeof(stats), tr("Frame: %d bind del back buffer, %d dopo la scena, %d draw"),
                                       frame::last_frame().backbuffer_binds, frame::last_frame().backbuffer_binds_after_scene,
                                       frame::last_frame().draws);
                         text_dim(stats);
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
                         ImGui::BeginDisabled(frame::analysis_pending());
-                        if (ImGui::Button(frame::analysis_pending() ? "Analisi in corso..." : "Analizza un frame", ImVec2(-1.0f, 0.0f)))
+                        if (ImGui::Button(frame::analysis_pending() ? tr("Analisi in corso...") : tr("Analizza un frame"), ImVec2(-1.0f, 0.0f)))
                         {
                             frame::request_analysis();
-                            a.toast("Analisi del frame scritta in ReShade.log");
+                            a.toast(tr("Analisi del frame scritta in ReShade.log"));
                         }
                         ImGui::EndDisabled();
                     }
@@ -649,8 +670,8 @@ void draw_profile_picker(App &a)
     const auto &names = a.profile_names();
     const std::string startup = a.startup_profile();
 
-    theme::group_label("Grafica");
-    theme::section("Che profilo usi?");
+    theme::group_label(tr("Grafica"));
+    theme::section(tr("Che profilo usi?"));
     const float gap = 12.0f * s;
     const float avail = ImGui::GetContentRegionAvail().x;
     const int per_row = std::max(1, std::min(3, static_cast<int>((avail + gap) / (280.0f * s + gap))));
@@ -685,14 +706,14 @@ void draw_profile_picker(App &a)
         theme::icon(draw, profile_icon(names[i]), ImVec2(x0 + icon_size * 0.5f, pos.y + height * 0.5f), icon_size,
                     ImGui::GetColorU32(selected ? col::on_accent : col::text_dim));
         const float tx = x0 + icon_size + 12.0f * s;
-        const std::string name = theme::upper(names[i].c_str());
+        const std::string name = theme::upper(tr(names[i].c_str()));
         ImFont *font = ImGui::GetFont();
         draw->AddText(font, ImGui::GetFontSize() * 1.12f, ImVec2(tx, pos.y + pad - 2.0f * s), ImGui::GetColorU32(title), name.c_str(), nullptr, 0.0f, nullptr);
         draw->AddText(ImVec2(tx - skew * 0.25f, pos.y + pad + line * 1.15f), ImGui::GetColorU32(sub), profile_description(a, names[i]), nullptr);
 
         if (names[i] == startup)
         {
-            const char *tag = "AVVIO";
+            const char *tag = tr("AVVIO");
             const ImVec2 size = ImGui::CalcTextSize(tag, nullptr, false, -1.0f);
             const float th = size.y + 2.0f * s;
             const float tw = size.x + 16.0f * s;
@@ -714,22 +735,22 @@ void draw_profile_picker(App &a)
     ImGui::SetCursorScreenPos(ImVec2(origin.x, origin.y + static_cast<float>(rows) * (height + gap)));
     ImGui::Dummy(ImVec2(0.0f, 0.0f));
 
-    theme::section("Avvio del gioco");
+    theme::section(tr("Avvio del gioco"));
     const std::string &current = names[a.profile_index];
     if (current == startup)
     {
         ImGui::AlignTextToFramePadding();
-        text_dim(("Questo profilo si carica all'avvio di rF2 (" + std::string(variant_name(a.active_variant())) + ").").c_str());
+        text_dim((tr("Questo profilo si carica all'avvio di rF2 (") + std::string(variant_name(a.active_variant())) + ").").c_str());
     }
     else
     {
-        if (theme::button("Usa all'avvio", theme::Look::Primary, theme::Icon::Star))
+        if (theme::button(tr("Usa all'avvio"), theme::Look::Primary, theme::Icon::Star))
             a.set_startup_profile();
         ImGui::SameLine(0.0f, 14.0f * s);
         ImGui::AlignTextToFramePadding();
-        text_dim(("Ora all'avvio si carica: " + startup).c_str());
+        text_dim((tr("Ora all'avvio si carica: ") + startup).c_str());
     }
-    text_dim("Profili fissi con il lucchetto: puoi provare modifiche, ma si salvano solo come nuovo profilo. In verde i tuoi profili.");
+    text_dim(tr("Profili fissi con il lucchetto: puoi provare modifiche, ma si salvano solo come nuovo profilo. In verde i tuoi profili."));
 }
 
 // --- Pagina Profili -------------------------------------------------------------
@@ -743,106 +764,106 @@ void draw_profiles(App &a)
     if (a.profile.name == "Originale rF2")
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::warn);
-        ImGui::TextWrapped("Originale rF2: tutti gli effetti KarmaTV sono spenti, anche quelli degli automatismi.");
+        ImGui::TextWrapped(tr("Originale rF2: tutti gli effetti KarmaTV sono spenti, anche quelli degli automatismi."));
         ImGui::PopStyleColor(1);
         if (effect_setting(a.profile, "auto_hdr").enabled && a.active_variant() == Variant::Monitor)
-            text_dim("AutoHDR resta acceso ma neutro (solo conversione in HDR, nessuna espansione). "
-                     "Per la grafica originale al 100%: spegni AutoHDR in Effetti e riavvia rF2.");
+            text_dim(tr("AutoHDR resta acceso ma neutro (solo conversione in HDR, nessuna espansione). "
+                     "Per la grafica originale al 100%: spegni AutoHDR in Effetti e riavvia rF2."));
         if (a.profile.features.af_override)
-            text_dim("Il filtro anisotropico resta forzato: per toglierlo spegnilo in Effetti e ricarica la pista.");
+            text_dim(tr("Il filtro anisotropico resta forzato: per toglierlo spegnilo in Effetti e ricarica la pista."));
     }
 
-    theme::section("Nuovo profilo");
+    theme::section(tr("Nuovo profilo"));
     static char new_name[64] = "";
     ImGui::SetNextItemWidth(360.0f * s);
-    ImGui::InputTextWithHint("##newprofile", "Nome del profilo (es. Daytona sera)", new_name, sizeof(new_name), 0, nullptr, nullptr);
+    ImGui::InputTextWithHint("##newprofile", tr("Nome del profilo (es. Daytona sera)"), new_name, sizeof(new_name), 0, nullptr, nullptr);
     a.ui_text_input = ImGui::IsItemActive();
     ImGui::SameLine();
-    if (ImGui::Button("Salva come nuovo profilo", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Salva come nuovo profilo"), ImVec2(0.0f, 0.0f)))
     {
         a.save_profile_as(new_name);
         new_name[0] = '\0';
     }
-    text_dim("Salva tutte le regolazioni attuali con il nome scritto, per la variante attiva (Monitor o VR).");
+    text_dim(tr("Salva tutte le regolazioni attuali con il nome scritto, per la variante attiva (Monitor o VR)."));
     if (!a.is_builtin_profile(names[a.profile_index]))
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::bad);
-        if (ImGui::Button("Elimina questo profilo", ImVec2(0.0f, 0.0f)))
+        if (ImGui::Button(tr("Elimina questo profilo"), ImVec2(0.0f, 0.0f)))
             a.delete_current_profile();
         ImGui::PopStyleColor(1);
     }
 
-    theme::section("Variante");
+    theme::section(tr("Variante"));
     int mode = static_cast<int>(a.variant_mode);
-    bool changed = ImGui::RadioButton("Automatica", &mode, 0);
+    bool changed = ImGui::RadioButton(tr("Automatica"), &mode, 0);
     ImGui::SameLine(0.0f, 24.0f * s);
-    changed |= ImGui::RadioButton("Monitor", &mode, 1);
+    changed |= ImGui::RadioButton(tr("Monitor"), &mode, 1);
     ImGui::SameLine(0.0f, 24.0f * s);
     changed |= ImGui::RadioButton("VR", &mode, 2);
     if (changed)
         a.set_variant_mode(static_cast<VariantMode>(mode));
     char detected[64];
-    std::snprintf(detected, sizeof(detected), "Rilevata automaticamente: %s", variant_name(a.detected_variant));
+    std::snprintf(detected, sizeof(detected), tr("Rilevata automaticamente: %s"), variant_name(a.detected_variant));
     text_dim(detected);
 
-    theme::section("Salvataggio");
+    theme::section(tr("Salvataggio"));
     const TelemetrySnapshot &t = a.telemetry.snapshot();
     const bool has_track = t.connected && !t.track_name.empty();
     const bool has_car = t.connected && !t.vehicle_name.empty();
     if (a.is_builtin_profile(names[a.profile_index]))
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::warn);
-        ImGui::TextWrapped("Profilo fisso: non si sovrascrive. Per tenere le modifiche salvale come nuovo profilo "
-                           "(qui sopra o con il pulsante in basso a destra).");
+        ImGui::TextWrapped(tr("Profilo fisso: non si sovrascrive. Per tenere le modifiche salvale come nuovo profilo "
+                           "(qui sopra o con il pulsante in basso a destra)."));
         ImGui::PopStyleColor(1);
-        if (ImGui::Button("Annulla modifiche", ImVec2(0.0f, 0.0f)))
+        if (ImGui::Button(tr("Annulla modifiche"), ImVec2(0.0f, 0.0f)))
             a.load_profile(a.profile_index);
         if (a.modified())
         {
             ImGui::PushStyleColor(ImGuiCol_Text, col::warn);
-            ImGui::TextUnformatted("Ci sono modifiche non salvate.");
+            ImGui::TextUnformatted(tr("Ci sono modifiche non salvate."));
             ImGui::PopStyleColor(1);
         }
-        text_dim(("Impostazioni di sistema (AutoHDR, HUD, profondità...) salvate da sole in: " + a.base_dir.string() + "\\sistema.ini").c_str());
+        text_dim((tr("Impostazioni di sistema (AutoHDR, HUD, profondità...) salvate da sole in: ") + a.base_dir.string() + tr("\\sistema.ini")).c_str());
         return;
     }
-    if (ImGui::Button("Salva profilo", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Salva profilo"), ImVec2(0.0f, 0.0f)))
         a.save_profile(App::SaveTarget::Profile);
     ImGui::SameLine();
     ImGui::BeginDisabled(!has_track);
-    if (ImGui::Button("Salva solo per questa pista", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Salva solo per questa pista"), ImVec2(0.0f, 0.0f)))
         a.save_profile(App::SaveTarget::Track);
     ImGui::EndDisabled();
     ImGui::SameLine();
     ImGui::BeginDisabled(!has_car);
-    if (ImGui::Button("Salva solo per questa auto", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Salva solo per questa auto"), ImVec2(0.0f, 0.0f)))
         a.save_profile(App::SaveTarget::Car);
     ImGui::EndDisabled();
     ImGui::SameLine();
-    if (ImGui::Button("Annulla modifiche", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Annulla modifiche"), ImVec2(0.0f, 0.0f)))
         a.load_profile(a.profile_index);
     ImGui::SameLine();
-    if (ImGui::Button("Ripristina valori predefiniti", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Ripristina valori predefiniti"), ImVec2(0.0f, 0.0f)))
         a.reset_profile_to_defaults();
 
     if (a.dirty)
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::warn);
-        ImGui::TextUnformatted("Ci sono modifiche non salvate.");
+        ImGui::TextUnformatted(tr("Ci sono modifiche non salvate."));
         ImGui::PopStyleColor(1);
     }
     if (!a.loaded_override.empty())
     {
-        const std::string text = std::string(a.override_is_car ? "Override auto attivo: " : "Override pista attivo: ") + a.loaded_override;
+        const std::string text = std::string(a.override_is_car ? tr("Override auto attivo: ") : tr("Override pista attivo: ")) + a.loaded_override;
         ImGui::PushStyleColor(ImGuiCol_Text, col::good);
         ImGui::TextUnformatted(text.c_str());
         ImGui::PopStyleColor(1);
     }
     if (has_track)
-        text_dim(("Pista: " + t.track_name).c_str());
+        text_dim((tr("Pista: ") + t.track_name).c_str());
     if (has_car)
-        text_dim(("Auto: " + t.vehicle_name + "  (l'override per pista ha la precedenza su quello per auto)").c_str());
-    text_dim(("Cartella dei preset: " + a.presets_dir.string()).c_str());
+        text_dim((tr("Auto: ") + t.vehicle_name + tr("  (l'override per pista ha la precedenza su quello per auto)")).c_str());
+    text_dim((tr("Cartella dei preset: ") + a.presets_dir.string()).c_str());
 }
 
 // --- Pagina Automatismi -------------------------------------------------------
@@ -851,55 +872,55 @@ void draw_rules(App &a)
 {
     const float s = theme::scale();
 
-    theme::section("Telemetria");
+    theme::section(tr("Telemetria"));
     const TelemetrySnapshot &t = a.telemetry.snapshot();
     if (t.connected)
     {
-        theme::chip("Collegata", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+        theme::chip(tr("Collegata"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
         char line[256];
-        std::snprintf(line, sizeof(line), "Pista: %s   |   Auto: %s", t.track_name.c_str(), t.vehicle_name.c_str());
+        std::snprintf(line, sizeof(line), tr("Pista: %s   |   Auto: %s"), t.track_name.c_str(), t.vehicle_name.c_str());
         text_dim(line);
         const int minutes = static_cast<int>(t.time_of_day / 60.0);
-        std::snprintf(line, sizeof(line), "Ora in pista %02d:%02d   |   Pioggia %.0f%%   |   Bagnato %.0f%%   |   Nuvole %.0f%%   |   Ai box: %s",
+        std::snprintf(line, sizeof(line), tr("Ora in pista %02d:%02d   |   Pioggia %.0f%%   |   Bagnato %.0f%%   |   Nuvole %.0f%%   |   Ai box: %s"),
                       (minutes / 60) % 24, minutes % 60,
-                      t.raining * 100.0, t.wetness_avg * 100.0, t.dark_cloud * 100.0, t.in_pits ? "sì" : "no");
+                      t.raining * 100.0, t.wetness_avg * 100.0, t.dark_cloud * 100.0, t.in_pits ? tr("sì") : tr("no"));
         text_dim(line);
     }
     else
     {
-        theme::chip("Non collegata", ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
-        text_dim("Attiva rF2SharedMemoryMapPlugin. I profili manuali funzionano comunque.");
+        theme::chip(tr("Non collegata"), ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
+        text_dim(tr("Attiva rF2SharedMemoryMapPlugin. I profili manuali funzionano comunque."));
     }
 
-    theme::section("Regole");
+    theme::section(tr("Regole"));
     ImGui::AlignTextToFramePadding();
-    ImGui::TextUnformatted("Automatismi attivi");
+    ImGui::TextUnformatted(tr("Automatismi attivi"));
     ImGui::SameLine();
     if (theme::toggle("##rules", &a.profile.features.rules_enabled))
         a.dirty = true;
     ImGui::SameLine(0.0f, 32.0f * s);
-    ImGui::TextUnformatted("Effetti nei replay");
+    ImGui::TextUnformatted(tr("Effetti nei replay"));
     ImGui::SameLine();
     if (theme::toggle("##replay", &a.profile.features.replay_effects))
         a.dirty = true;
     if (a.pipeline.replay_detected())
     {
         ImGui::SameLine();
-        theme::chip("Replay in corso", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+        theme::chip(tr("Replay in corso"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
     }
 
     // Profilo per replay e monitor di gara a schermo intero
     {
         const auto &names = a.profile_names();
         const std::string current = a.profile.features.replay_profile;
-        const std::string preview = current.empty() ? std::string("Nessuno (resta quello attivo)") : current;
+        const std::string preview = current.empty() ? std::string(tr("Nessuno (resta quello attivo)")) : current;
         ImGui::AlignTextToFramePadding();
-        ImGui::TextUnformatted("Profilo nei replay e nel monitor di gara");
+        ImGui::TextUnformatted(tr("Profilo nei replay e nel monitor di gara"));
         ImGui::SameLine();
         ImGui::SetNextItemWidth(300.0f * s);
         if (ImGui::BeginCombo("##replayprofile", preview.c_str(), 0))
         {
-            if (ImGui::Selectable("Nessuno (resta quello attivo)", current.empty(), 0, ImVec2(0.0f, 0.0f)))
+            if (ImGui::Selectable(tr("Nessuno (resta quello attivo)"), current.empty(), 0, ImVec2(0.0f, 0.0f)))
             {
                 a.profile.features.replay_profile.clear();
                 a.dirty = true;
@@ -919,10 +940,10 @@ void draw_rules(App &a)
         if (a.replay_profile_active())
         {
             ImGui::SameLine();
-            theme::chip("in uso ora", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+            theme::chip(tr("in uso ora"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
         }
-        text_dim("Quando parte un replay o guardi la gara a schermo intero dal monitor, KarmaTV passa a "
-                 "questo profilo e, finito il replay, torna a quello di prima. Serve \"Effetti nei replay\" acceso.");
+        text_dim(tr("Quando parte un replay o guardi la gara a schermo intero dal monitor, KarmaTV passa a "
+                 "questo profilo e, finito il replay, torna a quello di prima. Serve \"Effetti nei replay\" acceso."));
     }
 
     if (ImGui::BeginTable("rules", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
@@ -946,11 +967,11 @@ void draw_rules(App &a)
 
             ImGui::TableSetColumnIndex(1);
             ImGui::AlignTextToFramePadding();
-            ImGui::TextUnformatted(info.label);
+            ImGui::TextUnformatted(tr(info.label));
             if (!info.implemented)
             {
                 ImGui::SameLine();
-                theme::chip("in arrivo, fase 2", col::surface_high, col::text_dim);
+                theme::chip(tr("in arrivo, fase 2"), col::surface_high, col::text_dim);
             }
 
             ImGui::TableSetColumnIndex(2);
@@ -969,52 +990,52 @@ void draw_rules(App &a)
 
 void draw_broadcast(App &a, reshade::api::effect_runtime *rt)
 {
-    theme::section("Uscita pulita per OBS (Spout2)");
+    theme::section(tr("Uscita pulita per OBS (Spout2)"));
     ImGui::AlignTextToFramePadding();
-    ImGui::TextUnformatted("Clean feed Spout2");
+    ImGui::TextUnformatted(tr("Clean feed Spout2"));
     ImGui::SameLine();
     if (theme::toggle("##clean", &a.profile.features.clean_feed))
         a.dirty = true;
     if (a.active_variant() != Variant::Monitor)
-        text_dim("Disponibile solo nella variante Monitor.");
+        text_dim(tr("Disponibile solo nella variante Monitor."));
     if (spout::active())
     {
         ImGui::SameLine();
         char status[96];
-        std::snprintf(status, sizeof(status), "In onda %ux%u", spout::width(), spout::height());
+        std::snprintf(status, sizeof(status), tr("In onda %ux%u"), spout::width(), spout::height());
         theme::chip(status, ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
     }
     else if (a.profile.features.clean_feed)
     {
         ImGui::SameLine();
-        theme::chip("In attesa del primo frame", col::surface_high, col::text_dim);
+        theme::chip(tr("In attesa del primo frame"), col::surface_high, col::text_dim);
     }
-    text_dim("Invia a OBS la scena con gli effetti ma senza HUD, specchietto virtuale e finestra KarmaTV.");
-    text_dim("In OBS: plugin Spout2, sorgente \"Spout2 Capture\", sender \"KarmaTV rF2\".");
-    text_dim("Senza esclusione HUD (o nei menu) viene inviata l'immagine intera.");
+    text_dim(tr("Invia a OBS la scena con gli effetti ma senza HUD, specchietto virtuale e finestra KarmaTV."));
+    text_dim(tr("In OBS: plugin Spout2, sorgente \"Spout2 Capture\", sender \"KarmaTV rF2\"."));
+    text_dim(tr("Senza esclusione HUD (o nei menu) viene inviata l'immagine intera."));
 
-    theme::section("Regia");
-    if (ImGui::Button("Preset regia (Replay)", ImVec2(0.0f, 0.0f)))
+    theme::section(tr("Regia"));
+    if (ImGui::Button(tr("Preset regia (Replay)"), ImVec2(0.0f, 0.0f)))
     {
         const auto &names = a.profile_names();
         const auto it = std::find(names.begin(), names.end(), std::string("Replay Karma FX"));
         if (it != names.end())
         {
             a.load_profile(static_cast<int>(it - names.begin()));
-            a.toast("Profilo Replay Karma FX: profondità di campo, motion blur, antialiasing");
+            a.toast(tr("Profilo Replay Karma FX: profondità di campo, motion blur, antialiasing"));
         }
         else
         {
-            a.toast("Il profilo Replay Karma FX esiste solo nella variante Monitor");
+            a.toast(tr("Il profilo Replay Karma FX esiste solo nella variante Monitor"));
         }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Screenshot", ImVec2(0.0f, 0.0f)) && rt != nullptr)
+    if (ImGui::Button(tr("Screenshot"), ImVec2(0.0f, 0.0f)) && rt != nullptr)
     {
         rt->save_screenshot("KarmaTV");
-        a.toast("Screenshot salvato nella cartella degli screenshot di ReShade");
+        a.toast(tr("Screenshot salvato nella cartella degli screenshot di ReShade"));
     }
-    text_dim("Lo screenshot viene salvato con gli effetti, senza la finestra KarmaTV.");
+    text_dim(tr("Lo screenshot viene salvato con gli effetti, senza la finestra KarmaTV."));
 }
 
 // --- Pagina Prestazioni ---------------------------------------------------------
@@ -1023,32 +1044,32 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
 {
     const float s = theme::scale();
 
-    theme::section("Riepilogo");
+    theme::section(tr("Riepilogo"));
     char line[128];
-    std::snprintf(line, sizeof(line), "FPS: %.0f", ImGui::GetIO().Framerate);
+    std::snprintf(line, sizeof(line), tr("FPS: %.0f"), ImGui::GetIO().Framerate);
     ImGui::TextUnformatted(line);
     if (a.profiler.available())
     {
-        std::snprintf(line, sizeof(line), "Tempo GPU degli effetti KarmaTV: %.2f ms", a.profiler.total_ms());
+        std::snprintf(line, sizeof(line), tr("Tempo GPU degli effetti KarmaTV: %.2f ms"), a.profiler.total_ms());
         ImGui::TextUnformatted(line);
     }
     else
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::warn);
-        ImGui::TextUnformatted("Profiler GPU non disponibile: i valori sono stime.");
+        ImGui::TextUnformatted(tr("Profiler GPU non disponibile: i valori sono stime."));
         ImGui::PopStyleColor(1);
     }
 
     ImGui::SetNextItemWidth(320.0f * s);
-    if (ImGui::SliderFloat("Budget (ms)", &a.profile.budget_ms, 0.5f, 20.0f, "%.1f", 0))
+    if (ImGui::SliderFloat(tr("Budget (ms)"), &a.profile.budget_ms, 0.5f, 20.0f, "%.1f", 0))
         a.dirty = true;
 
-    theme::section("Effetti attivi");
+    theme::section(tr("Effetti attivi"));
     if (ImGui::BeginTable("perf", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
     {
-        ImGui::TableSetupColumn("Effetto", ImGuiTableColumnFlags_WidthStretch, 3.0f, 0);
-        ImGui::TableSetupColumn("Stima", ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
-        ImGui::TableSetupColumn("Misurato", ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
+        ImGui::TableSetupColumn(tr("Effetto"), ImGuiTableColumnFlags_WidthStretch, 3.0f, 0);
+        ImGui::TableSetupColumn(tr("Stima"), ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
+        ImGui::TableSetupColumn(tr("Misurato"), ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
         ImGui::TableHeadersRow();
 
         for (const EffectInfo &e : effect_catalog())
@@ -1057,16 +1078,16 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
                 continue;
             ImGui::TableNextRow(0, 0.0f);
             ImGui::TableSetColumnIndex(0);
-            ImGui::TextUnformatted(e.label);
+            ImGui::TextUnformatted(tr(e.label));
             ImGui::TableSetColumnIndex(1);
-            std::snprintf(line, sizeof(line), "%.1f - %.1f ms", e.cost_min_ms, e.cost_max_ms);
+            std::snprintf(line, sizeof(line), tr("%.1f - %.1f ms"), e.cost_min_ms, e.cost_max_ms);
             text_dim(line);
             ImGui::TableSetColumnIndex(2);
             bool measured = false;
             const float ms = effect_cost(a, rt, e, &measured);
             if (measured)
             {
-                std::snprintf(line, sizeof(line), "%.2f ms", ms);
+                std::snprintf(line, sizeof(line), tr("%.2f ms"), ms);
                 ImGui::TextUnformatted(line);
             }
             else
@@ -1077,68 +1098,68 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
         ImGui::EndTable();
     }
 
-    theme::section("Picchi");
-    std::snprintf(line, sizeof(line), "Picchi registrati in questa sessione: %d", spikes::count());
+    theme::section(tr("Picchi"));
+    std::snprintf(line, sizeof(line), tr("Picchi registrati in questa sessione: %d"), spikes::count());
     ImGui::TextUnformatted(line);
-    text_dim("Ogni picco (frame lungo o effetti molto piu' costosi del solito) finisce in ReShade.log con "
-             "il costo di ogni effetto e cosa era appena cambiato.");
+    text_dim(tr("Ogni picco (frame lungo o effetti molto piu' costosi del solito) finisce in ReShade.log con "
+             "il costo di ogni effetto e cosa era appena cambiato."));
 
-    theme::section("Diagnostica");
+    theme::section(tr("Diagnostica"));
     {
         // Vista della profondita': serve a verificare il depth buffer (nebbia e occlusione dipendono da lui)
         EffectSetting &debug = a.profile.effects["debug_views"];
         ImGui::AlignTextToFramePadding();
-        ImGui::TextUnformatted("Vista profondità");
+        ImGui::TextUnformatted(tr("Vista profondità"));
         ImGui::SameLine();
         if (theme::toggle("##depthview", &debug.enabled))
             a.dirty = true;
         ImGui::SameLine();
-        text_dim("corretta se gli oggetti vicini sono scuri e l'orizzonte chiaro");
+        text_dim(tr("corretta se gli oggetti vicini sono scuri e l'orizzonte chiaro"));
 
         const depth::Status &d = depth::status();
         char depth_line[200];
         if (d.error != nullptr)
-            std::snprintf(depth_line, sizeof(depth_line), "Profondità KarmaTV: errore, %s", d.error);
+            std::snprintf(depth_line, sizeof(depth_line), tr("Profondità KarmaTV: errore, %s"), d.error);
         else if (d.found)
-            std::snprintf(depth_line, sizeof(depth_line), "Profondità KarmaTV: %u x %u, MSAA %ux, %s, %llu copie",
+            std::snprintf(depth_line, sizeof(depth_line), tr("Profondità KarmaTV: %u x %u, MSAA %ux, %s, %llu copie"),
                           d.width, d.height, d.samples,
-                          d.reversed_known ? (d.reversed ? "invertita (rilevata)" : "normale (rilevata)") : "verso non ancora rilevato",
+                          d.reversed_known ? (d.reversed ? tr("invertita (rilevata)") : tr("normale (rilevata)")) : tr("verso non ancora rilevato"),
                           static_cast<unsigned long long>(d.copies));
         else
-            std::snprintf(depth_line, sizeof(depth_line), "Profondità KarmaTV: nessun depth buffer MSAA trovato (serve riavviare rF2 dopo l'installazione)");
+            std::snprintf(depth_line, sizeof(depth_line), tr("Profondità KarmaTV: nessun depth buffer MSAA trovato (serve riavviare rF2 dopo l'installazione)"));
         ImGui::PushStyleColor(ImGuiCol_Text, d.found && d.error == nullptr ? col::good : col::warn);
         ImGui::TextUnformatted(depth_line);
         ImGui::PopStyleColor(1);
 
         int mode = a.profile.features.depth_mode;
         ImGui::AlignTextToFramePadding();
-        ImGui::TextUnformatted("Verso della profondità");
+        ImGui::TextUnformatted(tr("Verso della profondità"));
         ImGui::SameLine();
-        bool changed = ImGui::RadioButton("Automatico", &mode, 0);
+        bool changed = ImGui::RadioButton(tr("Automatico"), &mode, 0);
         ImGui::SameLine();
-        changed |= ImGui::RadioButton("Normale", &mode, 1);
+        changed |= ImGui::RadioButton(tr("Normale"), &mode, 1);
         ImGui::SameLine();
-        changed |= ImGui::RadioButton("Invertito", &mode, 2);
+        changed |= ImGui::RadioButton(tr("Invertito"), &mode, 2);
         if (changed)
         {
             a.profile.features.depth_mode = mode;
             a.dirty = true;
         }
         ImGui::SetNextItemWidth(320.0f * s);
-        if (ImGui::SliderFloat("Distanza massima (m)", &a.profile.features.depth_far, 100.0f, 20000.0f, "%.0f", ImGuiSliderFlags_Logarithmic))
+        if (ImGui::SliderFloat(tr("Distanza massima (m)"), &a.profile.features.depth_far, 100.0f, 20000.0f, "%.0f", ImGuiSliderFlags_Logarithmic))
             a.dirty = true;
     }
     uint32_t width = 0, height = 0;
     rt->get_screenshot_width_and_height(&width, &height);
-    std::snprintf(line, sizeof(line), "Immagine elaborata da ReShade: %u x %u   |   Effetti ReShade: %s",
-                  width, height, rt->get_effects_state() ? "attivi" : "SPENTI");
+    std::snprintf(line, sizeof(line), tr("Immagine elaborata da ReShade: %u x %u   |   Effetti ReShade: %s"),
+                  width, height, rt->get_effects_state() ? tr("attivi") : tr("SPENTI"));
     text_dim(line);
     if (ImGui::BeginTable("diag", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
     {
-        ImGui::TableSetupColumn("Shader", ImGuiTableColumnFlags_WidthStretch, 3.0f, 0);
-        ImGui::TableSetupColumn("Trovato", ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
-        ImGui::TableSetupColumn("Richiesto", ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
-        ImGui::TableSetupColumn("In ReShade", ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
+        ImGui::TableSetupColumn(tr("Shader"), ImGuiTableColumnFlags_WidthStretch, 3.0f, 0);
+        ImGui::TableSetupColumn(tr("Trovato"), ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
+        ImGui::TableSetupColumn(tr("Richiesto"), ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
+        ImGui::TableSetupColumn(tr("In ReShade"), ImGuiTableColumnFlags_WidthStretch, 1.0f, 0);
         ImGui::TableHeadersRow();
         for (const EffectInfo &e : effect_catalog())
         {
@@ -1148,13 +1169,13 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
             ImGui::TableSetColumnIndex(0);
             ImGui::TextUnformatted(e.fx_file);
             ImGui::TableSetColumnIndex(1);
-            ImGui::TextUnformatted("sì");
+            ImGui::TextUnformatted(tr("sì"));
             ImGui::TableSetColumnIndex(2);
-            ImGui::TextUnformatted(a.pipeline.is_active(rt, e.id) ? "acceso" : "spento");
+            ImGui::TextUnformatted(a.pipeline.is_active(rt, e.id) ? tr("acceso") : tr("spento"));
             ImGui::TableSetColumnIndex(3);
             const bool on = a.pipeline.reshade_state(rt, e.id);
             ImGui::PushStyleColor(ImGuiCol_Text, on == a.pipeline.is_active(rt, e.id) ? col::good : col::bad);
-            ImGui::TextUnformatted(on ? "acceso" : "spento");
+            ImGui::TextUnformatted(on ? tr("acceso") : tr("spento"));
             ImGui::PopStyleColor(1);
         }
         ImGui::EndTable();
@@ -1166,13 +1187,13 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
 void draw_keys(App &a)
 {
     const float s = theme::scale();
-    theme::section("Tasti rapidi");
-    text_dim("rF2 legge la tastiera per conto suo e ignora Ctrl, Alt e Maiusc: usa solo tasti che rF2 non ha assegnato.");
+    theme::section(tr("Tasti rapidi"));
+    text_dim(tr("rF2 legge la tastiera per conto suo e ignora Ctrl, Alt e Maiusc: usa solo tasti che rF2 non ha assegnato."));
 
     if (ImGui::BeginTable("keys", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
     {
-        ImGui::TableSetupColumn("Azione", ImGuiTableColumnFlags_WidthStretch, 2.0f, 0);
-        ImGui::TableSetupColumn("Tasto", ImGuiTableColumnFlags_WidthStretch, 2.5f, 0);
+        ImGui::TableSetupColumn(tr("Azione"), ImGuiTableColumnFlags_WidthStretch, 2.0f, 0);
+        ImGui::TableSetupColumn(tr("Tasto"), ImGuiTableColumnFlags_WidthStretch, 2.5f, 0);
         ImGui::TableSetupColumn("cambia", ImGuiTableColumnFlags_WidthFixed, 200.0f * s, 0);
 
         for (int i = 0; i < static_cast<int>(HotkeyAction::Count); ++i)
@@ -1183,7 +1204,7 @@ void draw_keys(App &a)
 
             ImGui::TableSetColumnIndex(0);
             ImGui::AlignTextToFramePadding();
-            ImGui::TextUnformatted(hotkey_action_label(action));
+            ImGui::TextUnformatted(tr(hotkey_action_label(action)));
 
             ImGui::TableSetColumnIndex(1);
             ImGui::AlignTextToFramePadding();
@@ -1193,33 +1214,33 @@ void draw_keys(App &a)
             if (!conflict.empty())
             {
                 ImGui::SameLine();
-                const std::string note = "usato da rF2: " + conflict;
+                const std::string note = tr("usato da rF2: ") + conflict;
                 theme::chip(note.c_str(), ImVec4(col::bad.x, col::bad.y, col::bad.z, 0.18f), col::bad);
             }
 
             ImGui::TableSetColumnIndex(2);
             const bool capturing = hotkey_capturing(action);
-            if (ImGui::Button(capturing ? "Premi un tasto..." : "Cambia", ImVec2(-1.0f, 0.0f)) && !capturing)
+            if (ImGui::Button(capturing ? tr("Premi un tasto...") : tr("Cambia"), ImVec2(-1.0f, 0.0f)) && !capturing)
                 start_hotkey_capture(action);
             ImGui::PopID();
         }
         ImGui::EndTable();
     }
 
-    if (ImGui::Button("Ripristina tasti predefiniti", ImVec2(0.0f, 0.0f)))
+    if (ImGui::Button(tr("Ripristina tasti predefiniti"), ImVec2(0.0f, 0.0f)))
     {
         reset_hotkeys();
-        a.toast("Tasti predefiniti ripristinati");
+        a.toast(tr("Tasti predefiniti ripristinati"));
     }
 
-    theme::section("Pulsanti del volante");
+    theme::section(tr("Pulsanti del volante"));
     char devices[96];
-    std::snprintf(devices, sizeof(devices), "Controller collegati: %d. Usa pulsanti che non hai assegnato in rF2.", wheel_device_count());
+    std::snprintf(devices, sizeof(devices), tr("Controller collegati: %d. Usa pulsanti che non hai assegnato in rF2."), wheel_device_count());
     text_dim(devices);
     if (ImGui::BeginTable("wheel", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
     {
-        ImGui::TableSetupColumn("Azione", ImGuiTableColumnFlags_WidthStretch, 2.0f, 0);
-        ImGui::TableSetupColumn("Pulsante", ImGuiTableColumnFlags_WidthStretch, 2.5f, 0);
+        ImGui::TableSetupColumn(tr("Azione"), ImGuiTableColumnFlags_WidthStretch, 2.0f, 0);
+        ImGui::TableSetupColumn(tr("Pulsante"), ImGuiTableColumnFlags_WidthStretch, 2.5f, 0);
         ImGui::TableSetupColumn("cambia", ImGuiTableColumnFlags_WidthFixed, 200.0f * s, 0);
         ImGui::TableSetupColumn("togli", ImGuiTableColumnFlags_WidthFixed, 110.0f * s, 0);
 
@@ -1231,7 +1252,7 @@ void draw_keys(App &a)
 
             ImGui::TableSetColumnIndex(0);
             ImGui::AlignTextToFramePadding();
-            ImGui::TextUnformatted(hotkey_action_label(action));
+            ImGui::TextUnformatted(tr(hotkey_action_label(action)));
 
             ImGui::TableSetColumnIndex(1);
             ImGui::AlignTextToFramePadding();
@@ -1240,17 +1261,17 @@ void draw_keys(App &a)
 
             ImGui::TableSetColumnIndex(2);
             const bool capturing = wheel_capturing(action);
-            if (ImGui::Button(capturing ? "Premi un pulsante..." : "Cambia", ImVec2(-1.0f, 0.0f)) && !capturing)
+            if (ImGui::Button(capturing ? tr("Premi un pulsante...") : tr("Cambia"), ImVec2(-1.0f, 0.0f)) && !capturing)
                 start_wheel_capture(action);
 
             ImGui::TableSetColumnIndex(3);
-            if (ImGui::Button("Togli", ImVec2(-1.0f, 0.0f)))
+            if (ImGui::Button(tr("Togli"), ImVec2(-1.0f, 0.0f)))
                 clear_wheel_button(action);
             ImGui::PopID();
         }
         ImGui::EndTable();
     }
-    text_dim("Esc annulla la scelta di un tasto o di un pulsante. Tutto è salvato in KarmaTV-PostFX\\tasti.ini.");
+    text_dim(tr("Esc annulla la scelta di un tasto o di un pulsante. Tutto è salvato in KarmaTV-PostFX\\tasti.ini."));
 }
 
 // --- Finestra "Salva come nuovo profilo" ---------------------------------------
@@ -1262,17 +1283,17 @@ void draw_save_popup(App &a)
     {
         g_open_save_popup = false;
         g_save_name[0] = '\0';
-        ImGui::OpenPopup("Salva come nuovo profilo##ktvsave", 0);
+        ImGui::OpenPopup(tr("Salva come nuovo profilo##ktvsave"), 0);
     }
-    if (!ImGui::BeginPopupModal("Salva come nuovo profilo##ktvsave", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+    if (!ImGui::BeginPopupModal(tr("Salva come nuovo profilo##ktvsave"), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
         return;
-    ImGui::TextUnformatted(("Le modifiche a " + a.profile.name + " diventano un profilo nuovo.").c_str());
-    text_dim("Il profilo fisso resta com'era.");
+    ImGui::TextUnformatted((tr("Le modifiche a ") + a.profile.name + tr(" diventano un profilo nuovo.")).c_str());
+    text_dim(tr("Il profilo fisso resta com'era."));
     ImGui::Dummy(ImVec2(0.0f, 4.0f * s));
     if (ImGui::IsWindowAppearing())
         ImGui::SetKeyboardFocusHere(0);
     ImGui::SetNextItemWidth(360.0f * s);
-    const bool enter = ImGui::InputTextWithHint("##savename", "Nome del profilo (es. Daytona sera)", g_save_name, sizeof(g_save_name),
+    const bool enter = ImGui::InputTextWithHint("##savename", tr("Nome del profilo (es. Daytona sera)"), g_save_name, sizeof(g_save_name),
                                                 ImGuiInputTextFlags_EnterReturnsTrue, nullptr, nullptr);
     a.ui_text_input = true;
     const std::string name(g_save_name);
@@ -1280,14 +1301,14 @@ void draw_save_popup(App &a)
     if (taken)
     {
         ImGui::PushStyleColor(ImGuiCol_Text, col::bad);
-        ImGui::TextUnformatted("È il nome di un profilo fisso: scegline un altro.");
+        ImGui::TextUnformatted(tr("È il nome di un profilo fisso: scegline un altro."));
         ImGui::PopStyleColor(1);
     }
     ImGui::Dummy(ImVec2(0.0f, 4.0f * s));
     const bool valid = name.find_first_not_of(' ') != std::string::npos && !taken;
-    const bool save = theme::button("Salva", valid ? theme::Look::Go : theme::Look::Normal, theme::Icon::Save, 150.0f * s) || enter;
+    const bool save = theme::button(tr("Salva"), valid ? theme::Look::Go : theme::Look::Normal, theme::Icon::Save, 150.0f * s) || enter;
     ImGui::SameLine(0.0f, 12.0f * s);
-    if (theme::button("Annulla", theme::Look::Normal, theme::Icon::None, 150.0f * s) || ImGui::IsKeyPressed(ImGuiKey_Escape, false))
+    if (theme::button(tr("Annulla"), theme::Look::Normal, theme::Icon::None, 150.0f * s) || ImGui::IsKeyPressed(ImGuiKey_Escape, false))
         ImGui::CloseCurrentPopup();
     if (save && valid)
     {
@@ -1312,8 +1333,8 @@ void draw_footer(App &a)
     const update::Status u = update::status();
     ImGui::SameLine(0.0f, 10.0f * s);
     ImGui::AlignTextToFramePadding();
-    const char *check_label = u.state == update::State::Checking ? "Controllo..." :
-                              (u.state == update::State::UpToDate ? "Aggiornato · Controlla" : "Controlla aggiornamenti");
+    const char *check_label = u.state == update::State::Checking ? tr("Controllo...") :
+                              (u.state == update::State::UpToDate ? tr("Aggiornato · Controlla") : tr("Controlla aggiornamenti"));
     ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
     ImGui::TextUnformatted(check_label);
     ImGui::PopStyleColor(1);
@@ -1326,7 +1347,7 @@ void draw_footer(App &a)
     const bool fixed_changed = builtin && a.modified();
     if (fixed_changed || (!builtin && a.dirty))
     {
-        const char *label = fixed_changed ? "Salva come nuovo profilo" : "Salva modifiche";
+        const char *label = fixed_changed ? tr("Salva come nuovo profilo") : tr("Salva modifiche");
         const float width = theme::button_width(label, theme::Icon::Save);
         ImGui::SameLine();
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - width - 4.0f * s);
@@ -1385,19 +1406,19 @@ void draw_main_window(reshade::api::effect_runtime *runtime)
             {
                 if (g_simple_keys)
                 {
-                    if (theme::button("Torna ai profili", theme::Look::Normal, theme::Icon::Back))
+                    if (theme::button(tr("Torna ai profili"), theme::Look::Normal, theme::Icon::Back))
                         g_simple_keys = false;
                     draw_keys(a);
                 }
                 else
                 {
                     draw_profile_picker(a);
-                    theme::section("Tasti");
-                    if (theme::button("Personalizza i tasti", theme::Look::Outline, theme::Icon::Keyboard))
+                    theme::section(tr("Tasti"));
+                    if (theme::button(tr("Personalizza i tasti"), theme::Look::Outline, theme::Icon::Keyboard))
                         g_simple_keys = true;
                     ImGui::SameLine(0.0f, 14.0f * s);
                     ImGui::AlignTextToFramePadding();
-                    text_dim("Tasti della tastiera e pulsanti del volante per menu, effetti e profili.");
+                    text_dim(tr("Tasti della tastiera e pulsanti del volante per menu, effetti e profili."));
                 }
             }
             ImGui::EndChild();
