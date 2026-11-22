@@ -1,0 +1,7 @@
+build/
+out/
+dist/
+.vs/
+*.user
+# Screenshot di riferimento usati per le LUT (non nostri)
+luts/riferimenti/

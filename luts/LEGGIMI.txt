@@ -1,0 +1,18 @@
+LUT personali di KarmaTV PostFX
+================================
+
+Qui vanno le LUT "Personale 1-4" del color grading:
+  personale_1.png ... personale_4.png   (strisce 1024x32, LUT da 32 punti)
+
+Creare una LUT da due screenshot della stessa scena (rF2 normale e con il look
+desiderato, stessa risoluzione, effetti KarmaTV spenti):
+  build\x64\Release\ktv_lut.exe match originale.png riferimento.png luts\personale_1.png
+
+Con screenshot di scene diverse lo strumento usa un trasferimento statistico
+(tono, contrasto e dominante del riferimento).
+
+Anteprima su uno screenshot:
+  build\x64\Release\ktv_lut.exe apply luts\personale_1.png originale.png anteprima.png
+
+Poi tools\install.ps1 rigenera l'atlante KarmaTV_LUTs.png e lo copia in rF2.
+Nel menu: Effetti > LUT, bilanciamento... > + > LUT = Personale 1.
