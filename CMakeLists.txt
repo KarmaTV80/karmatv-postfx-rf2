@@ -1,6 +1,6 @@
-﻿cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.24)
 
-project(KarmaTV_PostFX VERSION 1.1.1 LANGUAGES CXX)
+project(KarmaTV_PostFX VERSION 1.1.2 LANGUAGES CXX)
 
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "KarmaTV PostFX si compila solo a 64 bit (rFactor 2 e' x64).")
