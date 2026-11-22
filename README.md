@@ -1,4 +1,4 @@
-# KarmaTV PostFX for rFactor 2
+# KarmaTV PostFX for rFactor2
 
 **English** · [Italiano](README.it.md) · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Português](README.pt.md)
 
@@ -14,7 +14,7 @@ Windows may show "Windows protected your PC" because the installer isn't digital
 
 Automation needs [rF2SharedMemoryMapPlugin](https://github.com/TheIronWolfModding/rF2SharedMemoryMapPlugin), enabled in rF2's Plugins options. The effects work without it.
 
-To uninstall: **Windows Settings > Apps > Installed apps > KarmaTV PostFX for rFactor 2**. Your profiles stay unless you choose to delete them.
+To uninstall: **Windows Settings > Apps > Installed apps > KarmaTV PostFX for rFactor2**. Your profiles stay unless you choose to delete them.
 
 ## Profiles
 

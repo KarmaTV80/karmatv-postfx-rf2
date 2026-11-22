@@ -12,7 +12,7 @@
 
 #include <d3d11.h>
 
-extern "C" __declspec(dllexport) const char *NAME = "KarmaTV PostFX";
+extern "C" __declspec(dllexport) const char *NAME = "KarmaTV PostFX for rFactor2";
 extern "C" __declspec(dllexport) const char *DESCRIPTION =
     "Effetti grafici per rFactor 2 con profili Monitor/VR, automatismi da telemetria e menu in gioco.";
 

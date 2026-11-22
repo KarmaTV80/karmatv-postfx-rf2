@@ -223,9 +223,12 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     ImGui::TextUnformatted("POSTFX");
     ImGui::PopFont();
 
-    // Stato: profilo e variante
+    // Stato: profilo e variante, un po' piu' grande del testo normale e sulla stessa linea
+    // di base di "POSTFX" (le due righe allineate in basso)
     ImGui::SameLine(0.0f, 26.0f * s);
-    ImGui::SetCursorPosY(row_top + (row_height - ImGui::GetTextLineHeight()) * 0.5f);
+    ImGui::PushFont(nullptr, theme::font_size() * 1.2f);
+    const float postfx_top = row_top + (row_height - big) * 0.5f;
+    ImGui::SetCursorPosY(postfx_top + (big - ImGui::GetTextLineHeight()) * 0.92f);
     text_dim(tr("PROFILO"));
     ImGui::SameLine(0.0f, 6.0f * s);
     ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
@@ -240,6 +243,7 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
         ImGui::TextUnformatted(a.override_is_car ? tr("OVERRIDE AUTO") : tr("OVERRIDE PISTA"));
         ImGui::PopStyleColor(1);
     }
+    ImGui::PopFont();
 
     // A destra: "Avanzate" e interruttore generale
     const char *master_label = a.master_enabled ? tr("EFFETTI ATTIVI") : tr("EFFETTI SPENTI");

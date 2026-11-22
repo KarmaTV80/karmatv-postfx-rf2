@@ -1,4 +1,4 @@
-# KarmaTV PostFX für rFactor 2
+# KarmaTV PostFX for rFactor2
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Français](README.fr.md) · **Deutsch** · [Português](README.pt.md)
 
@@ -14,7 +14,7 @@ Windows zeigt eventuell „Der Computer wurde durch Windows geschützt“, weil 
 
 Die Automatik braucht [rF2SharedMemoryMapPlugin](https://github.com/TheIronWolfModding/rF2SharedMemoryMapPlugin), aktiviert in den Plugin-Optionen von rF2. Die Effekte funktionieren auch ohne.
 
-Deinstallieren: **Windows-Einstellungen > Apps > Installierte Apps > KarmaTV PostFX for rFactor 2**. Deine Profile bleiben erhalten, außer du entscheidest dich, sie zu löschen.
+Deinstallieren: **Windows-Einstellungen > Apps > Installierte Apps > KarmaTV PostFX for rFactor2**. Deine Profile bleiben erhalten, außer du entscheidest dich, sie zu löschen.
 
 ## Profile
 

@@ -17,7 +17,7 @@
 
 [Setup]
 AppId={{CE98C0B3-324F-4916-B9E1-E81D0A97C373}
-AppName=KarmaTV PostFX for rFactor 2
+AppName=KarmaTV PostFX for rFactor2
 AppVersion={#AppVersion}
 AppVerName=KarmaTV PostFX {#AppVersion}
 AppPublisher=KarmaTV
@@ -28,7 +28,7 @@ UsePreviousAppDir=yes
 DisableProgramGroupPage=yes
 Uninstallable=yes
 UninstallFilesDir={app}\Bin64\KarmaTV-PostFX\uninstall
-UninstallDisplayName=KarmaTV PostFX for rFactor 2
+UninstallDisplayName=KarmaTV PostFX for rFactor2
 PrivilegesRequired=admin
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
