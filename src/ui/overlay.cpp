@@ -12,6 +12,7 @@
 #include "update/updater.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <string>
 #include <unordered_set>
@@ -112,6 +113,80 @@ void text_dim(const char *text)
     ImGui::PushStyleColor(ImGuiCol_Text, col::text_dim);
     ImGui::TextUnformatted(text);
     ImGui::PopStyleColor(1);
+}
+
+// Passo dei pulsanti - e +: circa un centesimo della scala, arrotondato a una potenza di 10
+// (0..1 -> 0.01, 0..30 -> 0.1, 50..2000 -> 10). Sui cursori logaritmici dipende dal valore.
+float fine_step(float value, float min_value, float max_value, bool logarithmic)
+{
+    const float span = logarithmic ? std::max(std::fabs(value), 1.0f) : (max_value - min_value);
+    return std::pow(10.0f, std::floor(std::log10(std::max(span, 1e-4f) / 100.0f)));
+}
+
+// Pulsante quadrato del cursore fine; tenendolo premuto ripete
+bool fine_button(const char *label)
+{
+    const float size = ImGui::GetFrameHeight();
+    return ImGui::Button(label, ImVec2(size, size));
+}
+
+// Cursore con - e + ai lati per le correzioni fini. width < 0 = tutto lo spazio disponibile.
+bool fine_slider(const char *id, float *value, float min_value, float max_value, const char *format,
+                 ImGuiSliderFlags flags = 0, float width = -1.0f)
+{
+    const float s = theme::scale();
+    const float gap = 4.0f * s;
+    const float button = ImGui::GetFrameHeight();
+    const float total = width < 0.0f ? ImGui::GetContentRegionAvail().x : width;
+    const float step = fine_step(*value, min_value, max_value, (flags & ImGuiSliderFlags_Logarithmic) != 0);
+    bool changed = false;
+    ImGui::PushID(id);
+    ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
+    if (fine_button("-"))
+    {
+        *value = std::clamp(std::round((*value - step) / step) * step, min_value, max_value);
+        changed = true;
+    }
+    ImGui::SameLine(0.0f, gap);
+    ImGui::SetNextItemWidth(std::max(total - 2.0f * (button + gap), 40.0f * s));
+    changed |= ImGui::SliderFloat("##value", value, min_value, max_value, format, flags);
+    ImGui::SameLine(0.0f, gap);
+    if (fine_button("+"))
+    {
+        *value = std::clamp(std::round((*value + step) / step) * step, min_value, max_value);
+        changed = true;
+    }
+    ImGui::PopItemFlag();
+    ImGui::PopID();
+    return changed;
+}
+
+bool fine_slider_int(const char *id, int *value, int min_value, int max_value, const char *format, float width = -1.0f)
+{
+    const float s = theme::scale();
+    const float gap = 4.0f * s;
+    const float button = ImGui::GetFrameHeight();
+    const float total = width < 0.0f ? ImGui::GetContentRegionAvail().x : width;
+    bool changed = false;
+    ImGui::PushID(id);
+    ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
+    if (fine_button("-") && *value > min_value)
+    {
+        --*value;
+        changed = true;
+    }
+    ImGui::SameLine(0.0f, gap);
+    ImGui::SetNextItemWidth(std::max(total - 2.0f * (button + gap), 40.0f * s));
+    changed |= ImGui::SliderInt("##value", value, min_value, max_value, format, 0);
+    ImGui::SameLine(0.0f, gap);
+    if (fine_button("+") && *value < max_value)
+    {
+        ++*value;
+        changed = true;
+    }
+    ImGui::PopItemFlag();
+    ImGui::PopID();
+    return changed;
 }
 
 // --- Intestazione -------------------------------------------------------------
@@ -437,7 +512,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                     else if (e.phase >= 3)
                     {
                         ImGui::SameLine();
-                        theme::chip("sperimentale", ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
+                        theme::chip(tr("sperimentale"), ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
                     }
                     if (std::string_view(e.id) == "auto_hdr")
                     {
@@ -445,12 +520,11 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         if (frame::hdr_restart_needed())
                             theme::chip(tr("riavvia rF2"), ImVec4(col::warn.x, col::warn.y, col::warn.z, 0.18f), col::warn);
                         else if (frame::hdr_active())
-                            theme::chip("attivo", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+                            theme::chip(tr("attivo"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                     }
 
                     ImGui::TableSetColumnIndex(2);
-                    ImGui::SetNextItemWidth(-1.0f);
-                    if (ImGui::SliderFloat("##intensity", &setting.intensity, 0.0f, 1.0f, "%.2f", 0))
+                    if (fine_slider("##intensity", &setting.intensity, 0.0f, 1.0f, "%.2f"))
                         a.dirty = true;
 
                     ImGui::TableSetColumnIndex(3);
@@ -518,7 +592,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                                     a.dirty = true;
                                 }
                             }
-                            else if (ImGui::SliderFloat("##param", &value, param.min_value, param.max_value, "%.2f", 0))
+                            else if (fine_slider("##param", &value, param.min_value, param.max_value, "%.2f"))
                             {
                                 setting.params[param.uniform] = value;
                                 a.dirty = true;
@@ -574,7 +648,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                     {
                         ImGui::SameLine();
                         if (frame::mirror_graded())
-                            theme::chip("applicato", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+                            theme::chip(tr("applicato"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                         else
                             theme::chip(tr("segue tonemap e LUT"), col::surface_high, col::text_dim);
                     }
@@ -588,7 +662,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                     else if (frame::last_frame().hook_fired)
                     {
                         ImGui::SameLine();
-                        theme::chip("agganciato", ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
+                        theme::chip(tr("agganciato"), ImVec4(col::good.x, col::good.y, col::good.z, 0.18f), col::good);
                     }
 
                     ImGui::TableSetColumnIndex(3);
@@ -605,8 +679,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         text_dim(tr("Livello anisotropico"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
-                        ImGui::SetNextItemWidth(-1.0f);
-                        if (ImGui::SliderInt("##aflevel", &a.profile.features.af_level, 2, 16, "%dx", 0))
+                        if (fine_slider_int("##aflevel", &a.profile.features.af_level, 2, 16, "%dx"))
                             a.dirty = true;
 
                         ImGui::TableNextRow(0, 0.0f);
@@ -616,8 +689,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         text_dim(tr("Spostamento LOD (negativo = più nitido)"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
-                        ImGui::SetNextItemWidth(-1.0f);
-                        if (ImGui::SliderFloat("##lodbias", &a.profile.features.lod_bias, -1.0f, 1.0f, "%.2f", 0))
+                        if (fine_slider("##lodbias", &a.profile.features.lod_bias, -1.0f, 1.0f, "%.2f"))
                             a.dirty = true;
                     }
 
@@ -631,8 +703,7 @@ void draw_effects(App &a, reshade::api::effect_runtime *rt)
                         text_dim(tr("Bind del back buffer dopo la scena (consigliato 2, 0 = fine frame)"));
                         ImGui::Unindent(28.0f * s);
                         ImGui::TableSetColumnIndex(2);
-                        ImGui::SetNextItemWidth(-1.0f);
-                        if (ImGui::SliderInt("##hook", &a.profile.features.hud_hook_index, 0, 12, "%d", 0))
+                        if (fine_slider_int("##hook", &a.profile.features.hud_hook_index, 0, 12, "%d"))
                             a.dirty = true;
 
                         ImGui::TableNextRow(0, 0.0f);
@@ -976,7 +1047,7 @@ void draw_rules(App &a)
 
             ImGui::TableSetColumnIndex(2);
             ImGui::AlignTextToFramePadding();
-            text_dim(info.source);
+            text_dim(tr(info.source));
 
             ImGui::TableSetColumnIndex(3);
             ImGui::ProgressBar(a.rules.weight(rule), ImVec2(-1.0f, ImGui::GetFrameHeight() * 0.6f), "");
@@ -1060,9 +1131,11 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
         ImGui::PopStyleColor(1);
     }
 
-    ImGui::SetNextItemWidth(320.0f * s);
-    if (ImGui::SliderFloat(tr("Budget (ms)"), &a.profile.budget_ms, 0.5f, 20.0f, "%.1f", 0))
+    if (fine_slider("##budget", &a.profile.budget_ms, 0.5f, 20.0f, "%.1f", 0, 400.0f * s))
         a.dirty = true;
+    ImGui::SameLine();
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted(tr("Budget (ms)"));
 
     theme::section(tr("Effetti attivi"));
     if (ImGui::BeginTable("perf", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp, ImVec2(0.0f, 0.0f), 0.0f))
@@ -1145,9 +1218,11 @@ void draw_performance(App &a, reshade::api::effect_runtime *rt)
             a.profile.features.depth_mode = mode;
             a.dirty = true;
         }
-        ImGui::SetNextItemWidth(320.0f * s);
-        if (ImGui::SliderFloat(tr("Distanza massima (m)"), &a.profile.features.depth_far, 100.0f, 20000.0f, "%.0f", ImGuiSliderFlags_Logarithmic))
+        if (fine_slider("##depthfar", &a.profile.features.depth_far, 100.0f, 20000.0f, "%.0f", ImGuiSliderFlags_Logarithmic, 400.0f * s))
             a.dirty = true;
+        ImGui::SameLine();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextUnformatted(tr("Distanza massima (m)"));
     }
     uint32_t width = 0, height = 0;
     rt->get_screenshot_width_and_height(&width, &height);

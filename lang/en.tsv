@@ -350,3 +350,15 @@ Impossibile preparare l'installazione automatica.	Couldn't set up the automatic 
 Originale rF2	rF2 Original
 PROFILO	PROFILE
 AVVIO	STARTUP
+sperimentale	experimental
+attivo	active
+applicato	applied
+agganciato	hooked
+Cielo coperto	Overcast sky
+mDarkCloud	mDarkCloud
+Notte o crepuscolo	Night or dusk
+ora del giorno (mStartET + mCurrentET)	time of day (mStartET + mCurrentET)
+Pit lane	Pit lane
+mInPits	mInPits
+Bandiera gialla o blu	Yellow or blue flag
+mYellowFlagState, mFlag	mYellowFlagState, mFlag

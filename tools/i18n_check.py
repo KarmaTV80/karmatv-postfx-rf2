@@ -68,6 +68,11 @@ def keys():
     for m in re.finditer(r'\{"[a-z_]+",\s*' + LITERAL + r',\s*\d+\}', hotkeys):
         add(c_unescape(m.group(1)))
 
+    rules = read('src/rules/auto_rules.cpp')
+    for m in re.finditer(r'\{' + LITERAL + r',\s*' + LITERAL + r',\s*(?:true|false)\}', rules):
+        add(c_unescape(m.group(1)))
+        add(c_unescape(m.group(2)))
+
     updater = read('src/update/updater.cpp')
     for m in re.finditer(r'set_state\(State::Failed,\s*' + LITERAL + r'\)', updater):
         add(c_unescape(m.group(1)))

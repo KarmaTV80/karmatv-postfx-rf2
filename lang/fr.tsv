@@ -350,3 +350,15 @@ Impossibile preparare l'installazione automatica.	Impossible de préparer l'inst
 Originale rF2	rF2 d'origine
 PROFILO	PROFIL
 AVVIO	DÉMARRAGE
+sperimentale	expérimental
+attivo	actif
+applicato	appliqué
+agganciato	accroché
+Cielo coperto	Ciel couvert
+mDarkCloud	mDarkCloud
+Notte o crepuscolo	Nuit ou crépuscule
+ora del giorno (mStartET + mCurrentET)	heure de la journée (mStartET + mCurrentET)
+Pit lane	Voie des stands
+mInPits	mInPits
+Bandiera gialla o blu	Drapeau jaune ou bleu
+mYellowFlagState, mFlag	mYellowFlagState, mFlag
