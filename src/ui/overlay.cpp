@@ -223,29 +223,8 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     ImGui::TextUnformatted("POSTFX");
     ImGui::PopFont();
 
-    // Stato: profilo e variante, un po' piu' grande del testo normale e sulla stessa linea
-    // di base di "POSTFX" (le due righe allineate in basso)
-    ImGui::SameLine(0.0f, 26.0f * s);
-    ImGui::PushFont(nullptr, theme::font_size() * 1.2f);
-    const float postfx_top = row_top + (row_height - big) * 0.5f;
-    ImGui::SetCursorPosY(postfx_top + (big - ImGui::GetTextLineHeight()) * 0.92f);
-    text_dim(tr("PROFILO"));
-    ImGui::SameLine(0.0f, 6.0f * s);
-    ImGui::PushStyleColor(ImGuiCol_Text, col::accent);
-    ImGui::TextUnformatted(theme::upper(tr(a.profile.name.c_str())).c_str());
-    ImGui::PopStyleColor(1);
-    ImGui::SameLine(0.0f, 6.0f * s);
-    text_dim((std::string("· ") + theme::upper(variant_name(a.active_variant()))).c_str());
-    if (!a.loaded_override.empty())
-    {
-        ImGui::SameLine(0.0f, 10.0f * s);
-        ImGui::PushStyleColor(ImGuiCol_Text, col::good);
-        ImGui::TextUnformatted(a.override_is_car ? tr("OVERRIDE AUTO") : tr("OVERRIDE PISTA"));
-        ImGui::PopStyleColor(1);
-    }
-    ImGui::PopFont();
-
-    // A destra: "Avanzate" e interruttore generale
+    // Gruppo a destra (lingua, Avanzate, interruttore): la sua larghezza dice quanto spazio
+    // resta per il nome del profilo
     const char *master_label = a.master_enabled ? tr("EFFETTI ATTIVI") : tr("EFFETTI SPENTI");
     const char *advanced_label = g_advanced ? tr("Chiudi avanzate") : tr("Avanzate");
     const float label_width = ImGui::CalcTextSize(master_label, nullptr, false, -1.0f).x;
@@ -253,9 +232,77 @@ void draw_header(App &a, reshade::api::effect_runtime *rt)
     const float advanced_width = theme::button_width(advanced_label, theme::Icon::Sliders);
     const std::string lang_label = theme::upper(i18n::current()) + "##lang";
     const float lang_width = theme::button_width(lang_label.c_str(), theme::Icon::Broadcast);
+    const float right_block = label_width + toggle_width + advanced_width + lang_width + style.ItemSpacing.x * 3.0f + 20.0f * s;
+
+    // Stato: PROFILO, nome, variante. Disegnato a mano su un'unica linea di base, allineata
+    // in basso a "POSTFX"; un nome troppo lungo si accorcia con "..." (intero nel tooltip).
+    ImGui::SameLine(0.0f, 26.0f * s);
+    {
+        const ImVec2 window = ImGui::GetWindowPos();
+        const float postfx_top = row_top + (row_height - big) * 0.5f;
+        const float x0 = ImGui::GetCursorScreenPos().x;
+        const float limit = x0 + ImGui::GetContentRegionAvail().x - right_block - 24.0f * s;
+        ImGui::PushFont(nullptr, theme::font_size() * 1.2f);
+        ImFont *font = ImGui::GetFont();
+        const float size = ImGui::GetFontSize();
+        const float line = ImGui::GetTextLineHeight();
+        const float y = window.y - ImGui::GetScrollY() + postfx_top + (big - line) * 0.92f;
+        const float gap = 8.0f * s;
+        const auto width_of = [](const std::string &t) { return ImGui::CalcTextSize(t.c_str(), nullptr, false, -1.0f).x; };
+
+        const std::string label = tr("PROFILO");
+        const std::string full_name = theme::upper(tr(a.profile.name.c_str()));
+        const std::string variant = std::string("· ") + theme::upper(variant_name(a.active_variant()));
+        std::string extra = a.loaded_override.empty() ? std::string() : std::string(a.override_is_car ? tr("OVERRIDE AUTO") : tr("OVERRIDE PISTA"));
+
+        float fixed = width_of(label) + gap + gap + width_of(variant);
+        if (!extra.empty() && x0 + fixed + gap + width_of(extra) + width_of(full_name) > limit)
+            extra.clear(); // poco spazio: prima si toglie l'avviso di override
+        if (!extra.empty())
+            fixed += gap + width_of(extra);
+        const float name_room = std::max(limit - x0 - fixed, 0.0f);
+        std::string name = full_name;
+        const bool truncated = width_of(name) > name_room;
+        if (truncated)
+        {
+            // Si tolgono caratteri interi (UTF-8) finche' il nome con "..." ci sta
+            while (!name.empty() && width_of(name + "...") > name_room)
+            {
+                while (!name.empty() && (static_cast<unsigned char>(name.back()) & 0xC0) == 0x80)
+                    name.pop_back(); // byte di continuazione UTF-8
+                if (!name.empty())
+                    name.pop_back(); // primo byte del carattere (o carattere ASCII)
+            }
+            name += "...";
+        }
+
+        ImDrawList *draw = ImGui::GetWindowDrawList();
+        float x = x0;
+        draw->AddText(font, size, ImVec2(x, y), ImGui::GetColorU32(col::text_dim), label.c_str(), nullptr, 0.0f, nullptr);
+        x += width_of(label) + gap;
+        const float name_x = x;
+        draw->AddText(font, size, ImVec2(x, y), ImGui::GetColorU32(col::accent), name.c_str(), nullptr, 0.0f, nullptr);
+        x += width_of(name) + gap;
+        draw->AddText(font, size, ImVec2(x, y), ImGui::GetColorU32(col::text_dim), variant.c_str(), nullptr, 0.0f, nullptr);
+        x += width_of(variant);
+        if (!extra.empty())
+        {
+            x += gap;
+            draw->AddText(font, size, ImVec2(x, y), ImGui::GetColorU32(col::good), extra.c_str(), nullptr, 0.0f, nullptr);
+            x += width_of(extra);
+        }
+        ImGui::PopFont();
+
+        // Spazio occupato, per il layout e per il tooltip del nome intero
+        ImGui::SetCursorScreenPos(ImVec2(x0, y));
+        ImGui::Dummy(ImVec2(x - x0, line));
+        if (truncated && ImGui::IsMouseHoveringRect(ImVec2(name_x, y), ImVec2(name_x + name_room, y + line), true))
+            ImGui::SetTooltip("%s", full_name.c_str());
+    }
+
     ImGui::SameLine();
     const float right = ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x;
-    ImGui::SetCursorPosX(right - label_width - toggle_width - advanced_width - lang_width - style.ItemSpacing.x * 3.0f - 20.0f * s);
+    ImGui::SetCursorPosX(right - right_block);
     ImGui::SetCursorPosY(row_top + (row_height - (ImGui::GetFrameHeight() + 4.0f * s)) * 0.5f);
     if (theme::button(lang_label.c_str(), theme::Look::Normal, theme::Icon::Broadcast))
         ImGui::OpenPopup("##language_menu", 0);
